@@ -184,6 +184,15 @@ p {
   margin-right: auto;
 }
 
+.section-title {
+  margin-bottom: 4rem;
+  text-align: center;
+}
+
+.bg-grey {
+  background: var(--clr-grey-10);
+}
+
 /* Navbar */
 
 .nav {
@@ -474,4 +483,25 @@ p {
 .footer p {
   font-size: 1.25rem;
   text-transform: capitalize;
+}
+
+/* Single Page */
+
+.single-page {
+  min-height: calc(100vh - 5rem - 198px);
+  background: var(--clr-primary-10);
+}
+
+.page-info {
+  max-width: 700px;
+}
+
+.page-info a {
+  color: var(--clr-primary-5);
+  transition: var(--transition);
+  -webkit-transition: var(--transition);
+}
+
+.page-info a:hover {
+  color: var(--clr-primary-1);
 }
