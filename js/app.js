@@ -12,3 +12,8 @@ navBtn?.addEventListener('click', function () {
 closeBtn?.addEventListener('click', function () {
   sidebar?.classList.remove('show-sidebar');
 });
+
+// set year
+if (date) {
+  date.innerHTML = String(new Date().getFullYear());
+}
