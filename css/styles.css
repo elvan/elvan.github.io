@@ -79,7 +79,7 @@ h4 {
   margin-bottom: 0.75rem;
   line-height: 1.25;
   font-family: var(--ff-primary);
-  text-transform: capitalize;
+  /* text-transform: capitalize; */
   letter-spacing: var(--spacing);
 }
 
@@ -173,6 +173,15 @@ p {
   .section-center {
     width: 95vw;
   }
+}
+
+.underline {
+  width: 5rem;
+  height: 0.25rem;
+  margin-bottom: 1.25rem;
+  background: var(--clr-primary-5);
+  margin-left: auto;
+  margin-right: auto;
 }
 
 /* Navbar */
@@ -336,4 +345,37 @@ p {
 
 .close-btn:hover {
   color: #e66b6b;
+}
+
+/* Hero */
+
+.hero .underline {
+  margin-bottom: 0.5rem;
+  margin-left: 0;
+}
+
+.hero-img {
+  display: none;
+}
+
+.hero {
+  background: var(--clr-primary-10);
+}
+
+.hero-center {
+  display: grid;
+  min-height: calc(100vh - 5rem);
+  place-items: center;
+}
+
+.hero-info h4 {
+  color: var(--clr-grey-5);
+}
+
+.hero-icons {
+  justify-items: start;
+}
+
+.hero-btn {
+  margin-top: 1.25rem;
 }
