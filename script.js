@@ -236,14 +236,22 @@ function erase() {
   }
 }
 
-// Improved scroll progress indicator
+// Enhanced scroll progress indicator
 const progressBar = document.querySelector('.scroll-progress');
 if (progressBar) {
-  window.addEventListener('scroll', () => {
+  const updateProgress = () => {
     const windowHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
     const scrolled = (window.scrollY / windowHeight) * 100;
-    progressBar.style.width = `${scrolled}%`;
-  });
+    progressBar.style.width = `${Math.min(scrolled, 100)}%`;
+    
+    // Add glow effect based on scroll progress
+    const glowIntensity = Math.min(scrolled / 100, 1);
+    progressBar.style.boxShadow = `0 0 ${10 + glowIntensity * 10}px rgba(99, 102, 241, ${0.3 + glowIntensity * 0.4})`;
+  };
+  
+  window.addEventListener('scroll', updateProgress);
+  // Initialize on load
+  updateProgress();
 }
 
 // Improved theme toggle with local storage
