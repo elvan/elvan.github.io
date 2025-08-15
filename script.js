@@ -14,6 +14,7 @@ class PortfolioApp {
     this.themeToggle = document.querySelector('.theme-toggle');
     this.typedTextSpan = document.querySelector('.typed-text');
     this.cursor = document.querySelector('.cursor');
+    this.pageLoader = document.querySelector('#pageLoader');
 
     // Configuration
     this.textArray = [
@@ -41,6 +42,8 @@ class PortfolioApp {
     this.initializeTheme();
     this.initializeProjects();
     this.startTypingAnimation();
+    this.initializePageLoader();
+    this.updateCopyrightYear();
 
     // Initialize with home section visible
     const homeSection = document.querySelector('#home');
@@ -81,20 +84,29 @@ class PortfolioApp {
       clearTimeout(resizeTimeout);
       resizeTimeout = setTimeout(() => this.handleResize(), 250);
     }, { passive: true });
+
+    // Focus handling for better keyboard navigation
+    document.addEventListener('focusin', this.handleFocusIn.bind(this));
+    document.addEventListener('focusout', this.handleFocusOut.bind(this));
+
+    // Prefetch hover states for better performance
+    this.setupHoverPrefetch();
   }
 
   setupIntersectionObserver() {
     const observerOptions = {
       root: null,
-      rootMargin: '-20% 0px -20% 0px',
-      threshold: [0.1, 0.5]
+      rootMargin: '-10% 0px -10% 0px',
+      threshold: [0.1, 0.3, 0.5]
     };
 
     const observer = new IntersectionObserver((entries) => {
       entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          // Add visible class for animations
-          entry.target.classList.add('section-visible');
+        if (entry.isIntersecting && entry.intersectionRatio >= 0.1) {
+          // Add visible class with slight delay for better animation staging
+          setTimeout(() => {
+            entry.target.classList.add('section-visible');
+          }, 100);
 
           // Unobserve once visible (performance optimization)
           if (entry.target.id !== 'home') {
@@ -147,21 +159,30 @@ class PortfolioApp {
           const src = img.getAttribute('data-src');
 
           if (src) {
-            img.src = src;
-            img.onload = () => {
+            // Add loading state
+            img.classList.add('loading');
+            
+            // Create a new image to preload
+            const newImg = new Image();
+            newImg.onload = () => {
+              // Update src and add loaded class
+              img.src = src;
+              img.classList.remove('loading');
               img.classList.add('loaded');
               img.removeAttribute('data-src');
             };
-            img.onerror = () => {
+            newImg.onerror = () => {
+              img.classList.remove('loading');
               console.warn(`Failed to load image: ${src}`);
             };
+            newImg.src = src;
           }
 
           observer.unobserve(img);
         }
       });
     }, {
-      rootMargin: '50px'
+      rootMargin: '100px'
     });
 
     images.forEach(img => imageObserver.observe(img));
@@ -235,11 +256,70 @@ class PortfolioApp {
   handleKeyboardNavigation(e) {
     if (e.key === 'Escape') {
       this.closeMobileMenu();
+      // Return focus to mobile menu button if it was closed via keyboard
+      if (this.mobileMenuBtn) {
+        this.mobileMenuBtn.focus();
+      }
     }
 
     if (e.key === 'Tab') {
       // Ensure keyboard navigation visibility
       document.body.classList.add('keyboard-navigation');
+    }
+    
+    // Enhanced keyboard navigation for project filters
+    if (e.target.matches('.filter-btn')) {
+      this.handleFilterKeyNavigation(e);
+    }
+    
+    // Enhanced keyboard navigation for experience items and projects
+    if (e.target.matches('.experience-item, .project-card')) {
+      this.handleCardKeyNavigation(e);
+    }
+  }
+  
+  handleFilterKeyNavigation(e) {
+    const currentFilter = e.target;
+    const allFilters = [...document.querySelectorAll('.filter-btn')];
+    const currentIndex = allFilters.indexOf(currentFilter);
+    
+    let nextIndex;
+    
+    switch(e.key) {
+      case 'ArrowLeft':
+        e.preventDefault();
+        nextIndex = currentIndex > 0 ? currentIndex - 1 : allFilters.length - 1;
+        allFilters[nextIndex].focus();
+        break;
+      case 'ArrowRight':
+        e.preventDefault();
+        nextIndex = currentIndex < allFilters.length - 1 ? currentIndex + 1 : 0;
+        allFilters[nextIndex].focus();
+        break;
+      case 'Home':
+        e.preventDefault();
+        allFilters[0].focus();
+        break;
+      case 'End':
+        e.preventDefault();
+        allFilters[allFilters.length - 1].focus();
+        break;
+      case 'Enter':
+      case ' ':
+        e.preventDefault();
+        currentFilter.click();
+        break;
+    }
+  }
+  
+  handleCardKeyNavigation(e) {
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault();
+      // Find and click the primary link within the card
+      const link = e.target.querySelector('a');
+      if (link) {
+        link.click();
+      }
     }
   }
 
@@ -248,6 +328,36 @@ class PortfolioApp {
     if (window.innerWidth > 768) {
       this.closeMobileMenu();
     }
+    
+    // Update scroll progress on resize
+    this.updateScrollProgress();
+  }
+
+  handleFocusIn(e) {
+    // Add focus-visible class for better keyboard navigation styling
+    if (e.target.matches('a, button, [tabindex]:not([tabindex="-1"])')) {
+      e.target.classList.add('focus-visible');
+    }
+  }
+
+  handleFocusOut(e) {
+    e.target.classList.remove('focus-visible');
+  }
+
+  setupHoverPrefetch() {
+    // Prefetch critical interactions on hover for better performance
+    const interactiveElements = document.querySelectorAll('a[href^="#"], .cta-button, .filter-btn');
+    
+    interactiveElements.forEach(element => {
+      element.addEventListener('mouseenter', () => {
+        // Warm up the interaction - can add specific prefetch logic here
+        element.classList.add('hover-prefetch');
+      }, { once: false, passive: true });
+      
+      element.addEventListener('mouseleave', () => {
+        element.classList.remove('hover-prefetch');
+      }, { passive: true });
+    });
   }
 
   // Navigation Methods
@@ -261,6 +371,18 @@ class PortfolioApp {
 
     // Update ARIA attributes for accessibility
     this.mobileMenuBtn?.setAttribute('aria-expanded', isActive.toString());
+    
+    // Manage focus for better accessibility
+    if (isActive) {
+      // Focus first link when menu opens
+      const firstLink = this.navLinks?.querySelector('a');
+      if (firstLink) {
+        setTimeout(() => firstLink.focus(), 100);
+      }
+      this.announceToScreenReader('Mobile navigation menu opened');
+    } else {
+      this.announceToScreenReader('Mobile navigation menu closed');
+    }
   }
 
   closeMobileMenu() {
@@ -335,16 +457,40 @@ class PortfolioApp {
   }
 
   announceThemeChange(theme) {
-    const announcement = document.createElement('div');
-    announcement.textContent = `Switched to ${theme} mode`;
-    announcement.setAttribute('aria-live', 'polite');
-    announcement.style.position = 'absolute';
-    announcement.style.left = '-10000px';
-    document.body.appendChild(announcement);
-
+    this.announceToScreenReader(`Switched to ${theme} mode`);
+  }
+  
+  announceFilterChange(filter, count) {
+    const filterText = filter === 'all' ? 'all projects' : `${filter} projects`;
+    this.announceToScreenReader(`Showing ${count} ${filterText}`);
+  }
+  
+  announceToScreenReader(message) {
+    // Create or reuse existing announcement element
+    let announcement = document.getElementById('screen-reader-announcement');
+    if (!announcement) {
+      announcement = document.createElement('div');
+      announcement.id = 'screen-reader-announcement';
+      announcement.setAttribute('aria-live', 'polite');
+      announcement.setAttribute('aria-atomic', 'true');
+      announcement.className = 'sr-only';
+      document.body.appendChild(announcement);
+    }
+    
+    // Clear and set new message
+    announcement.textContent = '';
     setTimeout(() => {
-      document.body.removeChild(announcement);
-    }, 1000);
+      announcement.textContent = message;
+    }, 100);
+  }
+  
+  // Update copyright year to current year
+  updateCopyrightYear() {
+    const yearElement = document.getElementById('currentYear');
+    if (yearElement) {
+      const currentYear = new Date().getFullYear();
+      yearElement.textContent = currentYear;
+    }
   }
 
   // Project Filtering
@@ -352,23 +498,37 @@ class PortfolioApp {
     const filterValue = activeButton.getAttribute('data-filter');
     const projectCards = document.querySelectorAll('.project-card');
     const filterButtons = document.querySelectorAll('.filter-btn');
+    const projectsGrid = document.querySelector('#projects-grid');
 
-    // Update active button
-    filterButtons.forEach(btn => btn.classList.remove('active'));
+    // Update active button and ARIA states
+    filterButtons.forEach(btn => {
+      btn.classList.remove('active');
+      btn.setAttribute('aria-selected', 'false');
+    });
     activeButton.classList.add('active');
+    activeButton.setAttribute('aria-selected', 'true');
+    
+    // Update tabpanel labelledby
+    if (projectsGrid) {
+      projectsGrid.setAttribute('aria-labelledby', activeButton.id);
+    }
 
     // Filter projects with smooth animation
+    let visibleCount = 0;
     projectCards.forEach((card, index) => {
       const category = card.getAttribute('data-category');
       const shouldShow = filterValue === 'all' || category === filterValue;
 
       if (shouldShow) {
         card.style.display = 'block';
+        card.setAttribute('aria-hidden', 'false');
         setTimeout(() => {
           card.classList.add('visible');
         }, index * 50);
+        visibleCount++;
       } else {
         card.classList.remove('visible');
+        card.setAttribute('aria-hidden', 'true');
         setTimeout(() => {
           card.style.display = 'none';
         }, 300);
@@ -376,22 +536,41 @@ class PortfolioApp {
     });
 
     // Announce filter change for accessibility
-    const visibleCount = document.querySelectorAll('.project-card.visible').length;
     this.announceFilterChange(filterValue, visibleCount);
   }
 
-  announceFilterChange(filter, count) {
-    const announcement = document.createElement('div');
-    const filterText = filter === 'all' ? 'all projects' : `${filter} projects`;
-    announcement.textContent = `Showing ${count} ${filterText}`;
-    announcement.setAttribute('aria-live', 'polite');
-    announcement.style.position = 'absolute';
-    announcement.style.left = '-10000px';
-    document.body.appendChild(announcement);
+  // Removed - functionality moved to announceToScreenReader method
 
-    setTimeout(() => {
-      document.body.removeChild(announcement);
-    }, 1000);
+  // Page Loader
+  initializePageLoader() {
+    if (!this.pageLoader) return;
+
+    // Simulate loading time for demo purposes
+    const minLoadTime = 1500;
+    const startTime = performance.now();
+
+    const hideLoader = () => {
+      const elapsedTime = performance.now() - startTime;
+      const remainingTime = Math.max(0, minLoadTime - elapsedTime);
+
+      setTimeout(() => {
+        this.pageLoader.classList.add('loaded');
+        
+        // Remove from DOM after animation completes
+        setTimeout(() => {
+          if (this.pageLoader.parentNode) {
+            this.pageLoader.parentNode.removeChild(this.pageLoader);
+          }
+        }, 600);
+      }, remainingTime);
+    };
+
+    // Check if all critical resources are loaded
+    if (document.readyState === 'complete') {
+      hideLoader();
+    } else {
+      window.addEventListener('load', hideLoader);
+    }
   }
 
   // Typing Animation
@@ -459,6 +638,19 @@ class PortfolioApp {
 document.addEventListener('DOMContentLoaded', () => {
   new PortfolioApp();
 });
+
+// Performance monitoring (optional)
+if ('PerformanceObserver' in window) {
+  const observer = new PerformanceObserver((list) => {
+    const entries = list.getEntries();
+    entries.forEach(entry => {
+      if (entry.entryType === 'navigation') {
+        console.log(`Page load time: ${entry.loadEventEnd - entry.loadEventStart}ms`);
+      }
+    });
+  });
+  observer.observe({ entryTypes: ['navigation'] });
+}
 
 // Export for potential use in other modules
 if (typeof module !== 'undefined' && module.exports) {

@@ -6,24 +6,40 @@
     <meta name="description" content="Elvan Hidayat - Experienced Software Developer specializing in full-stack development with .NET, Laravel, React, and modern web technologies. Available for exciting opportunities." />
     <meta name="keywords" content="software developer, full stack developer, .NET, C#, Laravel, PHP, React, Vue.js, web development, enterprise applications" />
     <meta name="author" content="Elvan Hidayat" />
+    <meta name="theme-color" content="#6366f1" />
+    <meta name="color-scheme" content="light dark" />
     <meta property="og:title" content="Elvan Hidayat - Software Developer" />
     <meta property="og:description" content="Experienced Software Developer specializing in full-stack development with modern web technologies" />
     <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://elvan.github.io" />
     <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Elvan Hidayat - Software Developer" />
+    <meta name="twitter:description" content="Experienced Software Developer specializing in full-stack development with modern web technologies" />
     <title>Elvan Hidayat - Software Developer</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="preload" href="styles.css" as="style">
+    <link rel="preload" href="script.js" as="script">
     <link rel="stylesheet" href="styles.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
     <!-- Favicon -->
     <link rel="icon" type="image/png" href="favicon.ico" />
   </head>
   <body>
+    <!-- Skip to main content link for screen readers -->
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+    
+    <div class="page-loader" id="pageLoader">
+      <div class="loader-content">
+        <div class="loader-spinner"></div>
+        <p>Loading Portfolio...</p>
+      </div>
+    </div>
     <!-- Scroll Progress Bar -->
     <div class="scroll-progress"></div>
-    <header>
-      <nav>
+    <header role="banner">
+      <nav role="navigation" aria-label="Main navigation">
         <a href="#home" class="logo" data-text="Elvan Hidayat">Elvan Hidayat</a>
         <button class="mobile-menu-btn" aria-label="Toggle navigation menu">
           <span></span>
@@ -44,20 +60,20 @@
       </nav>
     </header>
 
-    <main>
-      <section id="home">
+    <main role="main" id="main-content">
+      <section id="home" aria-label="Hero section">
         <div class="container">
           <div class="hero-content">
-            <h1>Hi, I'm Elvan Hidayat</h1>
-            <p class="typing-text">I'm a <span class="typed-text"></span><span class="cursor">&nbsp;</span></p>
+            <h1>Hi, I'm <span class="highlight-name" data-text="Elvan Hidayat">Elvan Hidayat</span></h1>
+            <p class="typing-text" aria-live="polite" aria-label="Dynamic profession title">I'm a <span class="typed-text"></span><span class="cursor" aria-hidden="true">&nbsp;</span></p>
             <div class="hero-buttons">
               <a href="#projects" class="cta-button primary" aria-label="View my portfolio projects">
-                <i class="fas fa-code"></i>
-                View My Work
+                <i class="fas fa-code" aria-hidden="true"></i>
+                <span>View My Work</span>
               </a>
               <a href="#contact" class="cta-button secondary" aria-label="Contact me for opportunities">
-                <i class="fas fa-paper-plane"></i>
-                Get in Touch
+                <i class="fas fa-paper-plane" aria-hidden="true"></i>
+                <span>Get in Touch</span>
               </a>
             </div>
             <div class="hero-social">
@@ -75,7 +91,7 @@
         </div>
       </section>
 
-      <section id="about">
+      <section id="about" aria-label="About me">
         <div class="container">
           <div class="about-content">
             <div class="about-text">
@@ -93,21 +109,22 @@
               </p>
             </div>
             <div class="about-image">
-              <img src="https://avatars.githubusercontent.com/u/35147?v=4" alt="Elvan Hidayat - Software Developer">
+              <img src="https://avatars.githubusercontent.com/u/35147?v=4" alt="Elvan Hidayat - Software Developer" loading="lazy" width="400" height="400">
+              <div class="image-decoration" aria-hidden="true"></div>
             </div>
           </div>
         </div>
       </section>
 
-      <section id="experience" class="experience-section">
+      <section id="experience" class="experience-section" aria-label="Work experience">
         <div class="container">
           <h2>Work Experience</h2>
           <div class="section-description">
             My professional journey and contributions in software development
           </div>
 
-          <div class="experience-timeline">
-            <div class="experience-item">
+          <div class="experience-timeline" role="list" aria-label="Work experience timeline">
+            <div class="experience-item" role="listitem" tabindex="0">
               <div class="experience-header">
                 <h3>Software Developer</h3>
                 <span class="company">Aegislabs (PT. Aegis Ultima Teknologi)</span>
@@ -169,7 +186,7 @@
         </div>
       </section>
 
-      <section id="skills" class="skills-section">
+      <section id="skills" class="skills-section" aria-label="Technical skills">
         <div class="container">
           <h2>Technical Skills</h2>
           <div class="section-description">
@@ -383,18 +400,18 @@
       </section>
 
 
-      <section id="projects">
+      <section id="projects" aria-label="Featured projects">
         <div class="container">
           <div class="projects-content">
             <h2>Featured Projects</h2>
             <div class="section-description">
               Here are some of my recent projects that showcase my skills and experience.
             </div>
-            <div class="projects-filter">
-              <button class="filter-btn active" data-filter="all">All</button>
-              <button class="filter-btn" data-filter="react">React</button>
-              <button class="filter-btn" data-filter="vue">Vue.js</button>
-              <button class="filter-btn" data-filter="angular">Angular</button>
+            <div class="projects-filter" role="tablist" aria-label="Project category filters">
+              <button class="filter-btn active" data-filter="all" role="tab" aria-selected="true" aria-controls="projects-grid" id="filter-all">All</button>
+              <button class="filter-btn" data-filter="react" role="tab" aria-selected="false" aria-controls="projects-grid" id="filter-react">React</button>
+              <button class="filter-btn" data-filter="vue" role="tab" aria-selected="false" aria-controls="projects-grid" id="filter-vue">Vue.js</button>
+              <button class="filter-btn" data-filter="angular" role="tab" aria-selected="false" aria-controls="projects-grid" id="filter-angular">Angular</button>
             </div>
             <div class="projects-grid">
               <div class="project-card" data-category="react">
@@ -534,16 +551,12 @@
         </div>
       </section>
 
-      <section id="contact">
+      <section id="contact" aria-label="Contact information">
         <div class="container">
           <div class="contact-content">
             <h2>Get In Touch</h2>
             <p class="section-description">I'm always open to new opportunities and collaborations. Feel free to reach out!</p>
             <div class="contact-links">
-              <a href="mailto:elvan.hidayat@gmail.com" class="contact-link">
-                <i class="fas fa-envelope"></i>
-                <span>elvan.hidayat@gmail.com</span>
-              </a>
               <a href="https://github.com/elvan" target="_blank" rel="noopener noreferrer" class="contact-link">
                 <i class="fab fa-github"></i>
                 <span>github.com/elvan</span>
@@ -562,10 +575,10 @@
       </section>
     </main>
 
-    <footer>
+    <footer role="contentinfo">
       <div class="container">
         <div class="footer-content">
-          <p>&copy; 2024 Elvan Hidayat. All rights reserved.</p>
+          <p>&copy; <span id="currentYear">2025</span> Elvan Hidayat. All rights reserved.</p>
         </div>
       </div>
     </footer>
