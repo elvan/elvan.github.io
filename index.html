@@ -100,12 +100,12 @@
         </button>
 
         <div class="hidden lg:flex items-center gap-1">
-          <a href="#home" class="px-3 py-2 rounded-md text-sm font-medium hover:text-indigo-600 dark:hover:text-indigo-400 focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500">Home</a>
-          <a href="#about" class="px-3 py-2 rounded-md text-sm font-medium hover:text-indigo-600 dark:hover:text-indigo-400 focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500">About</a>
-          <a href="#experience" class="px-3 py-2 rounded-md text-sm font-medium hover:text-indigo-600 dark:hover:text-indigo-400 focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500">Experience</a>
-          <a href="#skills" class="px-3 py-2 rounded-md text-sm font-medium hover:text-indigo-600 dark:hover:text-indigo-400 focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500">Skills</a>
-          <a href="#projects" class="px-3 py-2 rounded-md text-sm font-medium hover:text-indigo-600 dark:hover:text-indigo-400 focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500">Projects</a>
-          <a href="#contact" class="px-3 py-2 rounded-md text-sm font-medium hover:text-indigo-600 dark:hover:text-indigo-400 focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500">Contact</a>
+          <a href="#home" class="nav-link px-3 py-2 rounded-md text-sm font-medium text-slate-700 dark:text-slate-200 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 underline-offset-[10px]" data-nav-link>Home</a>
+          <a href="#about" class="nav-link px-3 py-2 rounded-md text-sm font-medium text-slate-700 dark:text-slate-200 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 underline-offset-[10px]" data-nav-link>About</a>
+          <a href="#experience" class="nav-link px-3 py-2 rounded-md text-sm font-medium text-slate-700 dark:text-slate-200 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 underline-offset-[10px]" data-nav-link>Experience</a>
+          <a href="#skills" class="nav-link px-3 py-2 rounded-md text-sm font-medium text-slate-700 dark:text-slate-200 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 underline-offset-[10px]" data-nav-link>Skills</a>
+          <a href="#projects" class="nav-link px-3 py-2 rounded-md text-sm font-medium text-slate-700 dark:text-slate-200 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 underline-offset-[10px]" data-nav-link>Projects</a>
+          <a href="#contact" class="nav-link px-3 py-2 rounded-md text-sm font-medium text-slate-700 dark:text-slate-200 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 underline-offset-[10px]" data-nav-link>Contact</a>
           <button id="themeToggle" class="ml-2 inline-flex items-center justify-center w-10 h-10 rounded-md border border-slate-200 dark:border-slate-800 hover:bg-slate-50 dark:hover:bg-slate-900 transition" aria-label="Toggle dark mode">
             <i id="themeIcon" class="fa-solid fa-moon"></i>
           </button>
@@ -171,7 +171,7 @@
 
             <div class="md:col-span-5" data-reveal>
               <div class="relative mx-auto max-w-xs sm:max-w-sm">
-                <img class="rounded-2xl shadow-soft ring-1 ring-slate-900/5" src="https://avatars.githubusercontent.com/u/35147?v=4" alt="Elvan Hidayat portrait" width="480" height="480" loading="lazy" />
+                <img class="rounded-2xl shadow-soft ring-1 ring-slate-900/5" src="https://avatars.githubusercontent.com/u/35147?v=4" alt="Elvan Hidayat portrait" width="480" height="480" loading="eager" fetchpriority="high" decoding="async" sizes="(min-width: 768px) 480px, 60vw" />
                 <div aria-hidden="true" class="absolute -inset-3 -z-10 rounded-3xl bg-gradient-to-tr from-indigo-500/10 via-fuchsia-500/10 to-pink-500/10 blur-2xl"></div>
               </div>
             </div>
