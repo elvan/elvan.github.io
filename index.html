@@ -1,12 +1,11 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="scroll-smooth">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
     <meta name="description" content="Elvan Hidayat - Experienced Software Developer specializing in full-stack development with .NET, Laravel, React, and modern web technologies. Available for exciting opportunities." />
     <meta name="keywords" content="software developer, full stack developer, .NET, C#, Laravel, PHP, React, Vue.js, web development, enterprise applications" />
     <meta name="author" content="Elvan Hidayat" />
-    <meta name="theme-color" content="#6366f1" />
     <meta name="color-scheme" content="light dark" />
     <meta property="og:title" content="Elvan Hidayat - Software Developer" />
     <meta property="og:description" content="Experienced Software Developer specializing in full-stack development with modern web technologies" />
@@ -16,613 +15,515 @@
     <meta name="twitter:title" content="Elvan Hidayat - Software Developer" />
     <meta name="twitter:description" content="Experienced Software Developer specializing in full-stack development with modern web technologies" />
     <title>Elvan Hidayat - Software Developer</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Poppins:wght@300;400;500;600;700;800&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
-    <noscript><link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"></noscript>
-    <link rel="preload" href="styles.css" as="style">
-    <link rel="preload" href="script.js" as="script">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Poppins:wght@500;600;700&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Poppins:wght@500;600;700&display=swap" rel="stylesheet"></noscript>
+
+    <!-- Icons -->
     <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" as="style">
-    <link rel="stylesheet" href="styles.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
-    <!-- Favicon and Touch Icons -->
+
+    <!-- Favicons -->
     <link rel="icon" type="image/x-icon" href="favicon.ico" />
     <link rel="apple-touch-icon" sizes="180x180" href="favicon.ico">
     <link rel="icon" type="image/png" sizes="32x32" href="favicon.ico">
     <link rel="icon" type="image/png" sizes="16x16" href="favicon.ico">
-    <meta name="msapplication-TileColor" content="#6366f1">
-    <meta name="theme-color" media="(prefers-color-scheme: light)" content="#6366f1">
-    <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#1e293b">
+
+    <!-- Early theme to avoid FOUC -->
+    <script>
+      (function() {
+        try {
+          const stored = localStorage.getItem('theme');
+          const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+          const useDark = stored ? stored === 'dark' : prefersDark;
+          if (useDark) document.documentElement.classList.add('dark');
+          document.querySelector('meta[name="theme-color"]')?.remove();
+          const meta = document.createElement('meta');
+          meta.name = 'theme-color';
+          meta.content = useDark ? '#0f172a' : '#ffffff';
+          document.head.appendChild(meta);
+        } catch(e) {}
+      })();
+    </script>
+
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        darkMode: 'class',
+        theme: {
+          container: { center: true, padding: { DEFAULT: '1rem', sm: '2rem' } },
+          extend: {
+            colors: {
+              primary: { DEFAULT: '#6366f1' }, // indigo-500
+            },
+            fontFamily: {
+              sans: ['Inter', 'ui-sans-serif', 'system-ui', 'Segoe UI', 'Roboto', 'Apple Color Emoji', 'Segoe UI Emoji'],
+              display: ['Poppins', 'Inter', 'ui-sans-serif', 'system-ui'],
+            },
+            boxShadow: {
+              soft: '0 10px 30px -12px rgba(2,6,23,0.25)',
+            }
+          }
+        }
+      };
+    </script>
   </head>
-  <body>
-    <!-- Skip to main content link for screen readers -->
-    <a href="#main-content" class="skip-link">Skip to main content</a>
-    
-    <div class="page-loader" id="pageLoader">
-      <div class="loader-content">
-        <div class="loader-spinner"></div>
-        <p>Loading Portfolio...</p>
+  <body class="font-sans bg-white text-slate-800 dark:bg-slate-950 dark:text-slate-100 antialiased selection:bg-indigo-200 selection:text-indigo-950">
+    <!-- Skip link -->
+    <a href="#main-content" class="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:bg-indigo-600 focus:text-white focus:px-4 focus:py-2 focus:rounded-md">Skip to main content</a>
+
+    <!-- Page Loader -->
+    <div id="pageLoader" class="fixed inset-0 z-[100] grid place-items-center bg-white/95 dark:bg-slate-950/95 backdrop-blur-sm transition-opacity duration-300">
+      <div class="flex flex-col items-center gap-4">
+        <div class="h-10 w-10 rounded-full border-2 border-slate-300 dark:border-slate-700 border-t-indigo-500 animate-spin"></div>
+        <p class="text-sm text-slate-500 dark:text-slate-400">Loading portfolio…</p>
       </div>
     </div>
-    <!-- Scroll Progress Bar -->
-    <div class="scroll-progress"></div>
-    <header role="banner">
-      <nav role="navigation" aria-label="Main navigation">
-        <a href="#home" class="logo" data-text="Elvan Hidayat">Elvan Hidayat</a>
-        <button class="mobile-menu-btn" aria-label="Toggle navigation menu">
-          <span></span>
-          <span></span>
-          <span></span>
+
+    <!-- Scroll Progress -->
+    <div id="scrollProgress" aria-hidden="true" class="fixed left-0 top-0 h-1 w-0 bg-gradient-to-r from-indigo-500 via-fuchsia-500 to-pink-500 z-50 transition-[width] duration-200"></div>
+
+    <!-- Header -->
+    <header role="banner" class="sticky top-0 z-40 bg-white/70 dark:bg-slate-950/60 backdrop-blur-xl border-b border-slate-200/60 dark:border-slate-800/60">
+      <nav role="navigation" aria-label="Main navigation" class="container flex items-center justify-between py-4">
+        <a href="#home" class="relative font-display text-xl sm:text-2xl font-semibold tracking-tight">
+          <span class="bg-clip-text text-transparent bg-gradient-to-r from-indigo-600 via-fuchsia-600 to-pink-600">Elvan Hidayat</span>
+        </a>
+
+        <button id="mobileMenuButton" class="lg:hidden inline-flex items-center justify-center w-10 h-10 rounded-md border border-slate-200 dark:border-slate-800 hover:bg-slate-50 dark:hover:bg-slate-900 transition" aria-label="Toggle navigation menu" aria-expanded="false" aria-controls="mobileMenu">
+          <span class="sr-only">Open main menu</span>
+          <i class="fa-solid fa-bars text-lg"></i>
         </button>
-        <div class="nav-links">
-          <a href="#home" class="active">Home</a>
-          <a href="#about">About</a>
-          <a href="#experience">Experience</a>
-          <a href="#skills">Skills</a>
-          <a href="#projects">Projects</a>
-          <a href="#contact">Contact</a>
-          <button class="theme-toggle" aria-label="Toggle dark mode">
-            <i class="fas fa-moon"></i>
+
+        <div class="hidden lg:flex items-center gap-1">
+          <a href="#home" class="px-3 py-2 rounded-md text-sm font-medium hover:text-indigo-600 dark:hover:text-indigo-400 focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500">Home</a>
+          <a href="#about" class="px-3 py-2 rounded-md text-sm font-medium hover:text-indigo-600 dark:hover:text-indigo-400 focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500">About</a>
+          <a href="#experience" class="px-3 py-2 rounded-md text-sm font-medium hover:text-indigo-600 dark:hover:text-indigo-400 focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500">Experience</a>
+          <a href="#skills" class="px-3 py-2 rounded-md text-sm font-medium hover:text-indigo-600 dark:hover:text-indigo-400 focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500">Skills</a>
+          <a href="#projects" class="px-3 py-2 rounded-md text-sm font-medium hover:text-indigo-600 dark:hover:text-indigo-400 focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500">Projects</a>
+          <a href="#contact" class="px-3 py-2 rounded-md text-sm font-medium hover:text-indigo-600 dark:hover:text-indigo-400 focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500">Contact</a>
+          <button id="themeToggle" class="ml-2 inline-flex items-center justify-center w-10 h-10 rounded-md border border-slate-200 dark:border-slate-800 hover:bg-slate-50 dark:hover:bg-slate-900 transition" aria-label="Toggle dark mode">
+            <i id="themeIcon" class="fa-solid fa-moon"></i>
           </button>
         </div>
       </nav>
+
+      <!-- Mobile Menu -->
+      <div id="mobileMenu" class="lg:hidden hidden border-t border-slate-200 dark:border-slate-800 bg-white/80 dark:bg-slate-950/80 backdrop-blur-xl">
+        <div class="container py-3 flex flex-col gap-1">
+          <a href="#home" class="px-3 py-2 rounded-md text-sm font-medium hover:bg-slate-50 dark:hover:bg-slate-900">Home</a>
+          <a href="#about" class="px-3 py-2 rounded-md text-sm font-medium hover:bg-slate-50 dark:hover:bg-slate-900">About</a>
+          <a href="#experience" class="px-3 py-2 rounded-md text-sm font-medium hover:bg-slate-50 dark:hover:bg-slate-900">Experience</a>
+          <a href="#skills" class="px-3 py-2 rounded-md text-sm font-medium hover:bg-slate-50 dark:hover:bg-slate-900">Skills</a>
+          <a href="#projects" class="px-3 py-2 rounded-md text-sm font-medium hover:bg-slate-50 dark:hover:bg-slate-900">Projects</a>
+          <div class="flex items-center justify-between px-2 pt-2">
+            <a href="#contact" class="px-3 py-2 rounded-md text-sm font-medium hover:bg-slate-50 dark:hover:bg-slate-900">Contact</a>
+            <button id="themeToggleMobile" class="inline-flex items-center justify-center w-10 h-10 rounded-md border border-slate-200 dark:border-slate-800 hover:bg-slate-50 dark:hover:bg-slate-900 transition" aria-label="Toggle dark mode">
+              <i id="themeIconMobile" class="fa-solid fa-moon"></i>
+            </button>
+          </div>
+        </div>
+      </div>
     </header>
 
-    <main role="main" id="main-content">
-      <section id="home" aria-label="Hero section">
-        <div class="container">
-          <div class="hero-content">
-            <h1>Hi, I'm <span class="highlight-name" data-text="Elvan Hidayat">Elvan Hidayat</span></h1>
-            <p class="typing-text" aria-live="polite" aria-label="Dynamic profession title">I'm a <span class="typed-text"></span><span class="cursor" aria-hidden="true">&nbsp;</span></p>
-            <div class="hero-buttons">
-              <a href="#projects" class="cta-button primary" aria-label="View my portfolio projects">
-                <i class="fas fa-code" aria-hidden="true"></i>
-                <span>View My Work</span>
-              </a>
-              <a href="#contact" class="cta-button secondary" aria-label="Contact me for opportunities">
-                <i class="fas fa-paper-plane" aria-hidden="true"></i>
-                <span>Get in Touch</span>
-              </a>
+    <main id="main-content">
+      <!-- Hero -->
+      <section id="home" aria-label="Hero" class="relative overflow-hidden">
+        <div aria-hidden="true" class="pointer-events-none absolute inset-0 -z-10 bg-gradient-to-b from-indigo-50/70 to-transparent dark:from-indigo-950/20"></div>
+        <div class="container py-20 md:py-28">
+          <div class="grid md:grid-cols-12 gap-10 items-center">
+            <div class="md:col-span-7" data-reveal>
+              <p class="text-sm uppercase tracking-widest text-slate-500 dark:text-slate-400">Software Developer</p>
+              <h1 class="mt-3 font-display text-4xl sm:text-5xl md:text-6xl font-extrabold leading-tight">
+                Building clean, scalable, and delightful digital experiences
+              </h1>
+              <p class="mt-5 text-lg text-slate-600 dark:text-slate-300 max-w-2xl">
+                I craft robust full‑stack applications with a focus on performance, accessibility, and thoughtful design.
+              </p>
+
+              <p class="mt-6 text-base text-slate-500 dark:text-slate-400" aria-live="polite" aria-label="Dynamic profession title">
+                I'm a
+                <span id="typedText" class="font-semibold text-slate-900 dark:text-white"></span>
+                <span aria-hidden="true" class="inline-block align-middle ml-1 w-[2px] h-6 bg-indigo-500 animate-pulse"></span>
+              </p>
+
+              <div class="mt-8 flex flex-wrap gap-3">
+                <a href="#projects" class="inline-flex items-center gap-2 rounded-lg bg-indigo-600 text-white px-5 py-3 text-sm font-semibold shadow-soft hover:bg-indigo-500 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-indigo-600">
+                  <i class="fa-solid fa-code" aria-hidden="true"></i>
+                  View My Work
+                </a>
+                <a href="#contact" class="inline-flex items-center gap-2 rounded-lg border border-slate-300 dark:border-slate-700 px-5 py-3 text-sm font-semibold hover:bg-slate-50 dark:hover:bg-slate-900 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-indigo-600">
+                  <i class="fa-solid fa-paper-plane" aria-hidden="true"></i>
+                  Get in Touch
+                </a>
+              </div>
+
+              <div class="mt-6 flex items-center gap-4 text-slate-500">
+                <a class="hover:text-slate-900 dark:hover:text-white" href="https://github.com/elvan" target="_blank" rel="noopener noreferrer" aria-label="GitHub Profile"><i class="fab fa-github text-2xl"></i></a>
+                <a class="hover:text-slate-900 dark:hover:text-white" href="https://linkedin.com/in/elvan-hidayat" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn Profile"><i class="fab fa-linkedin text-2xl"></i></a>
+                <a class="hover:text-slate-900 dark:hover:text-white" href="https://t.me/elvanhd" target="_blank" rel="noopener noreferrer" aria-label="Telegram Profile"><i class="fab fa-telegram text-2xl"></i></a>
+              </div>
             </div>
-            <div class="hero-social">
-              <a href="https://github.com/elvan" target="_blank" rel="noopener noreferrer" aria-label="GitHub Profile">
-                <i class="fab fa-github"></i>
-              </a>
-              <a href="https://linkedin.com/in/elvan-hidayat" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn Profile">
-                <i class="fab fa-linkedin"></i>
-              </a>
-              <a href="https://t.me/elvanhd" target="_blank" rel="noopener noreferrer" aria-label="Telegram Profile">
-                <i class="fab fa-telegram"></i>
-              </a>
+
+            <div class="md:col-span-5" data-reveal>
+              <div class="relative mx-auto max-w-xs sm:max-w-sm">
+                <img class="rounded-2xl shadow-soft ring-1 ring-slate-900/5" src="https://avatars.githubusercontent.com/u/35147?v=4" alt="Elvan Hidayat portrait" width="480" height="480" loading="lazy" />
+                <div aria-hidden="true" class="absolute -inset-3 -z-10 rounded-3xl bg-gradient-to-tr from-indigo-500/10 via-fuchsia-500/10 to-pink-500/10 blur-2xl"></div>
+              </div>
             </div>
           </div>
         </div>
       </section>
 
-      <section id="about" aria-label="About me">
-        <div class="container">
-          <div class="about-content">
-            <div class="about-text">
-              <h2>About Me</h2>
-              <div class="about-intro">
-                <p class="lead">
-                  Hi there! I'm Elvan Hidayat, a passionate <strong>Full-Stack Software Developer</strong> with extensive experience in enterprise-level web development.
-                </p>
+      <!-- About -->
+      <section id="about" aria-label="About me" class="container py-20 md:py-28">
+        <div class="grid lg:grid-cols-12 gap-10 items-start">
+          <div class="lg:col-span-7 space-y-6" data-reveal>
+            <h2 class="font-display text-3xl md:text-4xl font-bold">About Me</h2>
+            <p class="text-lg text-slate-600 dark:text-slate-300">
+              Hi! I'm <strong>Elvan Hidayat</strong>, a <strong>Full‑Stack Software Developer</strong> with deep experience in enterprise web development.
+            </p>
+            <p class="text-slate-600 dark:text-slate-300">
+              I build scalable, secure, and user‑friendly applications using <strong>.NET Core</strong>, <strong>Laravel</strong>, <strong>React</strong>, and modern web stacks.
+              From compliance‑driven systems to modern interfaces, I focus on performance, security, and clarity.
+            </p>
+            <p class="text-slate-600 dark:text-slate-300">
+              I love collaborating, shipping maintainable code, and continuously learning. I'm open to new opportunities.
+            </p>
+
+            <div class="grid grid-cols-3 gap-4 pt-4">
+              <div class="rounded-xl border border-slate-200 dark:border-slate-800 p-4 text-center" data-reveal>
+                <div class="text-3xl font-extrabold text-slate-900 dark:text-white">4+</div>
+                <div class="text-xs uppercase tracking-wider text-slate-500">Years Experience</div>
               </div>
-              <div class="about-details">
-                <p>
-                  I specialize in creating scalable, secure, and user-friendly applications using cutting-edge technologies like <strong>.NET Core, Laravel, React,</strong> and modern web frameworks.
-                </p>
-                <p>
-                  With a proven track record in developing <strong>Enterprise Records Management Systems</strong> and complex web applications, I bring both technical expertise and business acumen to every project.
-                  My experience spans from <strong>government-level compliance systems</strong> to modern web applications, always focusing on performance, security, and exceptional user experience.
-                </p>
-                <p>
-                  I thrive in collaborative environments and am passionate about writing clean, maintainable code that stands the test of time. Currently open to exciting opportunities where I can contribute my skills and continue growing as a developer.
-                </p>
+              <div class="rounded-xl border border-slate-200 dark:border-slate-800 p-4 text-center" data-reveal>
+                <div class="text-3xl font-extrabold text-slate-900 dark:text-white">50+</div>
+                <div class="text-xs uppercase tracking-wider text-slate-500">Projects</div>
               </div>
-              <div class="about-stats">
-                <div class="stat-item">
-                  <span class="stat-number">4+</span>
-                  <span class="stat-label">Years Experience</span>
-                </div>
-                <div class="stat-item">
-                  <span class="stat-number">50+</span>
-                  <span class="stat-label">Projects Completed</span>
-                </div>
-                <div class="stat-item">
-                  <span class="stat-number">10+</span>
-                  <span class="stat-label">Technologies</span>
-                </div>
+              <div class="rounded-xl border border-slate-200 dark:border-slate-800 p-4 text-center" data-reveal>
+                <div class="text-3xl font-extrabold text-slate-900 dark:text-white">10+</div>
+                <div class="text-xs uppercase tracking-wider text-slate-500">Technologies</div>
               </div>
-            </div>
-            <div class="about-image">
-              <img src="https://avatars.githubusercontent.com/u/35147?v=4" alt="Elvan Hidayat - Software Developer" loading="lazy" width="400" height="400">
-              <div class="image-decoration" aria-hidden="true"></div>
             </div>
           </div>
-        </div>
-      </section>
 
-      <section id="experience" class="experience-section" aria-label="Work experience">
-        <div class="container">
-          <h2>Work Experience</h2>
-          <div class="section-description">
-            My professional journey and contributions in software development
-          </div>
-
-          <div class="experience-timeline" role="list" aria-label="Work experience timeline">
-            <div class="experience-item" role="listitem" tabindex="0">
-              <div class="experience-header">
-                <h3>Software Developer</h3>
-                <span class="company">Aegislabs (PT. Aegis Ultima Teknologi)</span>
-                <span class="duration">May 2025 - Present · 4 mos</span>
-              </div>
-              <ul class="experience-details">
-                <li><strong>Led development</strong> of a comprehensive Enterprise Records Management System (ERMS) for a major state-owned organization, digitizing legacy records and automating document workflows</li>
-                <li><strong>Built scalable web applications</strong> using C# and .NET framework, serving thousands of concurrent users with 99.9% uptime</li>
-                <li><strong>Managed full SDLC</strong> from requirements gathering to deployment, reducing delivery time by 30% through agile methodologies</li>
-                <li><strong>Optimized database performance</strong> with Microsoft SQL Server, improving query response time by 40% for large-scale document retrieval</li>
-                <li><strong>Architected RESTful APIs</strong> enabling seamless integration with 10+ third-party systems and internal applications</li>
-                <li><strong>Implemented CI/CD pipelines</strong> using Azure DevOps, reducing deployment time from hours to minutes</li>
-                <li><strong>Collaborated cross-functionally</strong> with business analysts, designers, and QA engineers to ensure government compliance standards</li>
-              </ul>
-            </div>
-
-            <div class="experience-item">
-              <div class="experience-header">
-                <h3>Software Engineer</h3>
-                <span class="company">PT. Akhdani Reka Solusi</span>
-                <span class="duration">Aug 2023 - Nov 2024 · 1 yr 4 mos</span>
-              </div>
-              <ul class="experience-details">
-                <li><strong>Developed and maintained</strong> enterprise web applications using .NET Core and Blazor, improving user productivity by 25%</li>
-                <li><strong>Implemented advanced features</strong> using Evolve Library for database migration, LeafDB, and MudBlazor component framework</li>
-                <li><strong>Built full-stack applications</strong> using Laravel PHP and Spring Boot, handling complex business logic and data processing</li>
-                <li><strong>Developed web applications</strong> using PHP and Yii 2 Framework with Bootstrap 4 for modern, responsive design</li>
-                <li><strong>Created responsive interfaces</strong> with jQuery and Tailwind CSS, ensuring consistent user experience across all devices</li>
-                <li><strong>Built key business features</strong> including tenant management, building management, and automated invoice generation systems</li>
-                <li><strong>Managed complex data</strong> using PostgreSQL with optimized queries and efficient database design patterns</li>
-                <li><strong>Enhanced performance</strong> through application and database query optimization, reducing load times by 35%</li>
-                <li><strong>Delivered pixel-perfect implementations</strong> working closely with designers to maintain design integrity and usability</li>
-                <li><strong>Enhanced code quality</strong> through active participation in code reviews and implementing senior developer feedback</li>
-                <li><strong>Collaborated effectively</strong> with cross-functional teams to deliver high-quality solutions on time and within budget</li>
-                <li><strong>Mastered industry best practices</strong> in web development, code organization, and software architecture principles</li>
-              </ul>
-            </div>
-
-            <div class="experience-item">
-              <div class="experience-header">
-                <h3>Software Developer</h3>
-                <span class="company">PT Bentang Inspira Teknologi</span>
-                <span class="duration">Apr 2022 - Jan 2023 · 10 mos</span>
-              </div>
-              <ul class="experience-details">
-                <li><strong>Served as software engineer</strong> on Indonesia's Ministry of Home Affairs regional development information system, contributing to government digital transformation initiatives</li>
-                <li><strong>Developed centralized modules</strong> for planning and budgeting data management, streamlining public sector resource allocation processes</li>
-                <li><strong>Implemented comprehensive reporting components</strong> enabling government officials to generate detailed analytics and performance reports</li>
-                <li><strong>Built intuitive user interface elements</strong> improving data visualization and accessibility for government stakeholders</li>
-                <li><strong>Enhanced transparency</strong> in public sector resource management through improved data presentation and reporting capabilities</li>
-                <li><strong>Collaborated with government stakeholders</strong> to ensure compliance with public sector requirements and data security standards</li>
+          <div class="lg:col-span-5 space-y-4" data-reveal>
+            <div class="rounded-2xl border border-slate-200 dark:border-slate-800 p-6 bg-white/50 dark:bg-slate-900/50">
+              <h3 class="font-semibold text-slate-900 dark:text-white mb-4">Core Values</h3>
+              <ul class="space-y-2 text-slate-600 dark:text-slate-300">
+                <li class="flex items-start gap-3"><i class="fa-solid fa-circle-check text-indigo-500 mt-1"></i> Clarity over complexity</li>
+                <li class="flex items-start gap-3"><i class="fa-solid fa-circle-check text-indigo-500 mt-1"></i> Accessibility and performance as first‑class citizens</li>
+                <li class="flex items-start gap-3"><i class="fa-solid fa-circle-check text-indigo-500 mt-1"></i> Craftsmanship and continuous improvement</li>
               </ul>
             </div>
           </div>
         </div>
       </section>
 
-      <section id="skills" class="skills-section" aria-label="Technical skills">
+      <!-- Experience -->
+      <section id="experience" aria-label="Work experience" class="bg-slate-50/60 dark:bg-slate-900/40 py-20 md:py-28">
         <div class="container">
-          <h2>Technical Skills</h2>
-          <div class="section-description">
-            Here's an overview of my technical expertise and proficiency levels in various technologies
+          <h2 class="font-display text-3xl md:text-4xl font-bold mb-3" data-reveal>Work Experience</h2>
+          <p class="text-slate-600 dark:text-slate-300 mb-10 max-w-3xl" data-reveal>My professional journey and contributions in software development</p>
+
+          <div class="relative">
+            <div aria-hidden="true" class="absolute left-4 md:left-1/2 top-0 bottom-0 w-[2px] bg-slate-200 dark:bg-slate-800"></div>
+
+            <!-- Item -->
+            <article class="relative md:grid md:grid-cols-2 gap-10 mb-12" data-reveal>
+              <div class="md:col-start-1 md:text-right pr-8 md:pr-12">
+                <h3 class="text-xl font-semibold">Software Developer</h3>
+                <p class="text-sm text-slate-500">Aegislabs (PT. Aegis Ultima Teknologi)</p>
+                <p class="text-xs text-slate-500">May 2025 - Present · 4 mos</p>
+              </div>
+              <div class="md:col-start-2 pl-8 md:pl-12">
+                <ul class="list-disc pl-4 space-y-2 text-slate-600 dark:text-slate-300">
+                  <li>Led development of Enterprise Records Management System (ERMS), digitizing legacy records and automating workflows</li>
+                  <li>Built scalable .NET apps serving thousands with 99.9% uptime</li>
+                  <li>Optimized SQL Server queries, improving large retrievals by 40%</li>
+                  <li>Architected RESTful APIs used by 10+ integrations; implemented CI/CD with Azure DevOps</li>
+                </ul>
+              </div>
+            </article>
+
+            <!-- Item -->
+            <article class="relative md:grid md:grid-cols-2 gap-10 mb-12" data-reveal>
+              <div class="md:col-start-1 md:text-right pr-8 md:pr-12">
+                <h3 class="text-xl font-semibold">Software Engineer</h3>
+                <p class="text-sm text-slate-500">PT. Akhdani Reka Solusi</p>
+                <p class="text-xs text-slate-500">Aug 2023 - Nov 2024 · 1 yr 4 mos</p>
+              </div>
+              <div class="md:col-start-2 pl-8 md:pl-12">
+                <ul class="list-disc pl-4 space-y-2 text-slate-600 dark:text-slate-300">
+                  <li>Developed enterprise applications using .NET Core, Blazor, Laravel, and Spring Boot</li>
+                  <li>Improved performance and UX; reduced load times by 35%</li>
+                  <li>Delivered tenant and invoice automation modules with PostgreSQL</li>
+                </ul>
+              </div>
+            </article>
+
+            <!-- Item -->
+            <article class="relative md:grid md:grid-cols-2 gap-10" data-reveal>
+              <div class="md:col-start-1 md:text-right pr-8 md:pr-12">
+                <h3 class="text-xl font-semibold">Software Developer</h3>
+                <p class="text-sm text-slate-500">PT Bentang Inspira Teknologi</p>
+                <p class="text-xs text-slate-500">Apr 2022 - Jan 2023 · 10 mos</p>
+              </div>
+              <div class="md:col-start-2 pl-8 md:pl-12">
+                <ul class="list-disc pl-4 space-y-2 text-slate-600 dark:text-slate-300">
+                  <li>Contributed to regional development information system for MOHA</li>
+                  <li>Built planning/budgeting modules and reporting components</li>
+                  <li>Improved data visualization and accessibility for stakeholders</li>
+                </ul>
+              </div>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <!-- Skills -->
+      <section id="skills" aria-label="Technical skills" class="container py-20 md:py-28">
+        <h2 class="font-display text-3xl md:text-4xl font-bold mb-3" data-reveal>Technical Skills</h2>
+        <p class="text-slate-600 dark:text-slate-300 mb-10 max-w-3xl" data-reveal>Here's an overview of my technical expertise and proficiency levels</p>
+
+        <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+          <!-- Category -->
+          <div class="rounded-2xl border border-slate-200 dark:border-slate-800 p-6 bg-white/50 dark:bg-slate-900/50" data-reveal>
+            <h3 class="font-semibold mb-4">Frontend</h3>
+            <div class="space-y-4">
+              <div>
+                <div class="flex items-center justify-between text-sm"><span>HTML5/CSS3</span><span>90%</span></div>
+                <div class="h-2 rounded-full bg-slate-200 dark:bg-slate-800 mt-2 overflow-hidden"><div class="skill-bar h-2 bg-indigo-500 rounded-full w-0" data-width="90"></div></div>
+              </div>
+              <div>
+                <div class="flex items-center justify-between text-sm"><span>JavaScript</span><span>85%</span></div>
+                <div class="h-2 rounded-full bg-slate-200 dark:bg-slate-800 mt-2 overflow-hidden"><div class="skill-bar h-2 bg-indigo-500 rounded-full w-0" data-width="85"></div></div>
+              </div>
+              <div>
+                <div class="flex items-center justify-between text-sm"><span>React.js</span><span>80%</span></div>
+                <div class="h-2 rounded-full bg-slate-200 dark:bg-slate-800 mt-2 overflow-hidden"><div class="skill-bar h-2 bg-indigo-500 rounded-full w-0" data-width="80"></div></div>
+              </div>
+              <div>
+                <div class="flex items-center justify-between text-sm"><span>Responsive Design</span><span>85%</span></div>
+                <div class="h-2 rounded-full bg-slate-200 dark:bg-slate-800 mt-2 overflow-hidden"><div class="skill-bar h-2 bg-indigo-500 rounded-full w-0" data-width="85"></div></div>
+              </div>
+            </div>
           </div>
 
-          <div class="skills-container">
-            <div class="skills-category" data-aos="fade-up" data-aos-delay="100">
-              <h3>Frontend Development</h3>
-              <div class="skill-item">
-                <div class="skill-info">
-                  <span class="skill-name">HTML5/CSS3</span>
-                  <span class="skill-percentage">90%</span>
-                </div>
-                <div class="progress-bar">
-                  <div class="progress" data-width="90"></div>
-                </div>
-              </div>
-
-              <div class="skill-item">
-                <div class="skill-info">
-                  <span class="skill-name">JavaScript</span>
-                  <span class="skill-percentage">85%</span>
-                </div>
-                <div class="progress-bar">
-                  <div class="progress" data-width="85"></div>
-                </div>
-              </div>
-
-              <div class="skill-item">
-                <div class="skill-info">
-                  <span class="skill-name">React.js</span>
-                  <span class="skill-percentage">80%</span>
-                </div>
-                <div class="progress-bar">
-                  <div class="progress" data-width="80"></div>
-                </div>
-              </div>
-
-              <div class="skill-item">
-                <div class="skill-info">
-                  <span class="skill-name">Responsive Design</span>
-                  <span class="skill-percentage">85%</span>
-                </div>
-                <div class="progress-bar">
-                  <div class="progress" data-width="85"></div>
-                </div>
-              </div>
+          <div class="rounded-2xl border border-slate-200 dark:border-slate-800 p-6 bg-white/50 dark:bg-slate-900/50" data-reveal>
+            <h3 class="font-semibold mb-4">Backend</h3>
+            <div class="space-y-4">
+              <div><div class="flex items-center justify-between text-sm"><span>C# / .NET</span><span>85%</span></div><div class="h-2 rounded-full bg-slate-200 dark:bg-slate-800 mt-2 overflow-hidden"><div class="skill-bar h-2 bg-indigo-500 rounded-full w-0" data-width="85"></div></div></div>
+              <div><div class="flex items-center justify-between text-sm"><span>PHP</span><span>85%</span></div><div class="h-2 rounded-full bg-slate-200 dark:bg-slate-800 mt-2 overflow-hidden"><div class="skill-bar h-2 bg-indigo-500 rounded-full w-0" data-width="85"></div></div></div>
+              <div><div class="flex items-center justify-between text-sm"><span>Laravel</span><span>80%</span></div><div class="h-2 rounded-full bg-slate-200 dark:bg-slate-800 mt-2 overflow-hidden"><div class="skill-bar h-2 bg-indigo-500 rounded-full w-0" data-width="80"></div></div></div>
+              <div><div class="flex items-center justify-between text-sm"><span>SQL Server</span><span>85%</span></div><div class="h-2 rounded-full bg-slate-200 dark:bg-slate-800 mt-2 overflow-hidden"><div class="skill-bar h-2 bg-indigo-500 rounded-full w-0" data-width="85"></div></div></div>
             </div>
+          </div>
 
-            <div class="skills-category" data-aos="fade-up" data-aos-delay="200">
-              <h3>Backend Development</h3>
-              <div class="skill-item">
-                <div class="skill-info">
-                  <span class="skill-name">C# / .NET</span>
-                  <span class="skill-percentage">85%</span>
-                </div>
-                <div class="progress-bar">
-                  <div class="progress" data-width="85"></div>
-                </div>
-              </div>
-
-              <div class="skill-item">
-                <div class="skill-info">
-                  <span class="skill-name">PHP</span>
-                  <span class="skill-percentage">85%</span>
-                </div>
-                <div class="progress-bar">
-                  <div class="progress" data-width="85"></div>
-                </div>
-              </div>
-
-              <div class="skill-item">
-                <div class="skill-info">
-                  <span class="skill-name">Laravel</span>
-                  <span class="skill-percentage">80%</span>
-                </div>
-                <div class="progress-bar">
-                  <div class="progress" data-width="80"></div>
-                </div>
-              </div>
-
-              <div class="skill-item">
-                <div class="skill-info">
-                  <span class="skill-name">SQL Server</span>
-                  <span class="skill-percentage">85%</span>
-                </div>
-                <div class="progress-bar">
-                  <div class="progress" data-width="85"></div>
-                </div>
-              </div>
-
-              <div class="skill-item">
-                <div class="skill-info">
-                  <span class="skill-name">MySQL</span>
-                  <span class="skill-percentage">80%</span>
-                </div>
-                <div class="progress-bar">
-                  <div class="progress" data-width="80"></div>
-                </div>
-              </div>
-
-              <div class="skill-item">
-                <div class="skill-info">
-                  <span class="skill-name">RESTful APIs</span>
-                  <span class="skill-percentage">80%</span>
-                </div>
-                <div class="progress-bar">
-                  <div class="progress" data-width="80"></div>
-                </div>
-              </div>
+          <div class="rounded-2xl border border-slate-200 dark:border-slate-800 p-6 bg-white/50 dark:bg-slate-900/50" data-reveal>
+            <h3 class="font-semibold mb-4">Tools</h3>
+            <div class="space-y-4">
+              <div><div class="flex items-center justify-between text-sm"><span>Git/GitHub</span><span>85%</span></div><div class="h-2 rounded-full bg-slate-200 dark:bg-slate-800 mt-2 overflow-hidden"><div class="skill-bar h-2 bg-indigo-500 rounded-full w-0" data-width="85"></div></div></div>
+              <div><div class="flex items-center justify-between text-sm"><span>VS Code</span><span>90%</span></div><div class="h-2 rounded-full bg-slate-200 dark:bg-slate-800 mt-2 overflow-hidden"><div class="skill-bar h-2 bg-indigo-500 rounded-full w-0" data-width="90"></div></div></div>
+              <div><div class="flex items-center justify-between text-sm"><span>CLI</span><span>80%</span></div><div class="h-2 rounded-full bg-slate-200 dark:bg-slate-800 mt-2 overflow-hidden"><div class="skill-bar h-2 bg-indigo-500 rounded-full w-0" data-width="80"></div></div></div>
+              <div><div class="flex items-center justify-between text-sm"><span>Postman</span><span>85%</span></div><div class="h-2 rounded-full bg-slate-200 dark:bg-slate-800 mt-2 overflow-hidden"><div class="skill-bar h-2 bg-indigo-500 rounded-full w-0" data-width="85"></div></div></div>
             </div>
+          </div>
 
-            <div class="skills-category" data-aos="fade-up" data-aos-delay="300">
-              <h3>Development Tools</h3>
-              <div class="skill-item">
-                <div class="skill-info">
-                  <span class="skill-name">Git/GitHub</span>
-                  <span class="skill-percentage">85%</span>
-                </div>
-                <div class="progress-bar">
-                  <div class="progress" data-width="85"></div>
-                </div>
-              </div>
-
-              <div class="skill-item">
-                <div class="skill-info">
-                  <span class="skill-name">VS Code</span>
-                  <span class="skill-percentage">90%</span>
-                </div>
-                <div class="progress-bar">
-                  <div class="progress" data-width="90"></div>
-                </div>
-              </div>
-
-              <div class="skill-item">
-                <div class="skill-info">
-                  <span class="skill-name">Command Line</span>
-                  <span class="skill-percentage">80%</span>
-                </div>
-                <div class="progress-bar">
-                  <div class="progress" data-width="80"></div>
-                </div>
-              </div>
-
-              <div class="skill-item">
-                <div class="skill-info">
-                  <span class="skill-name">Postman</span>
-                  <span class="skill-percentage">85%</span>
-                </div>
-                <div class="progress-bar">
-                  <div class="progress" data-width="85"></div>
-                </div>
-              </div>
-
-              <div class="skill-item">
-                <div class="skill-info">
-                  <span class="skill-name">Azure DevOps</span>
-                  <span class="skill-percentage">75%</span>
-                </div>
-                <div class="progress-bar">
-                  <div class="progress" data-width="75"></div>
-                </div>
-              </div>
-            </div>
-
-            <div class="skills-category" data-aos="fade-up" data-aos-delay="400">
-              <h3>Other Skills</h3>
-              <div class="skill-item">
-                <div class="skill-info">
-                  <span class="skill-name">UI/UX Design</span>
-                  <span class="skill-percentage">75%</span>
-                </div>
-                <div class="progress-bar">
-                  <div class="progress" data-width="75"></div>
-                </div>
-              </div>
-
-              <div class="skill-item">
-                <div class="skill-info">
-                  <span class="skill-name">Problem Solving</span>
-                  <span class="skill-percentage">85%</span>
-                </div>
-                <div class="progress-bar">
-                  <div class="progress" data-width="85"></div>
-                </div>
-              </div>
-
-              <div class="skill-item">
-                <div class="skill-info">
-                  <span class="skill-name">Team Collaboration</span>
-                  <span class="skill-percentage">90%</span>
-                </div>
-                <div class="progress-bar">
-                  <div class="progress" data-width="90"></div>
-                </div>
-              </div>
-
-              <div class="skill-item">
-                <div class="skill-info">
-                  <span class="skill-name">Project Management</span>
-                  <span class="skill-percentage">80%</span>
-                </div>
-                <div class="progress-bar">
-                  <div class="progress" data-width="80"></div>
-                </div>
-              </div>
+          <div class="rounded-2xl border border-slate-200 dark:border-slate-800 p-6 bg-white/50 dark:bg-slate-900/50" data-reveal>
+            <h3 class="font-semibold mb-4">Other</h3>
+            <div class="space-y-4">
+              <div><div class="flex items-center justify-between text-sm"><span>UI/UX Design</span><span>75%</span></div><div class="h-2 rounded-full bg-slate-200 dark:bg-slate-800 mt-2 overflow-hidden"><div class="skill-bar h-2 bg-indigo-500 rounded-full w-0" data-width="75"></div></div></div>
+              <div><div class="flex items-center justify-between text-sm"><span>Problem Solving</span><span>85%</span></div><div class="h-2 rounded-full bg-slate-200 dark:bg-slate-800 mt-2 overflow-hidden"><div class="skill-bar h-2 bg-indigo-500 rounded-full w-0" data-width="85"></div></div></div>
+              <div><div class="flex items-center justify-between text-sm"><span>Collaboration</span><span>90%</span></div><div class="h-2 rounded-full bg-slate-200 dark:bg-slate-800 mt-2 overflow-hidden"><div class="skill-bar h-2 bg-indigo-500 rounded-full w-0" data-width="90"></div></div></div>
+              <div><div class="flex items-center justify-between text-sm"><span>Project Management</span><span>80%</span></div><div class="h-2 rounded-full bg-slate-200 dark:bg-slate-800 mt-2 overflow-hidden"><div class="skill-bar h-2 bg-indigo-500 rounded-full w-0" data-width="80"></div></div></div>
             </div>
           </div>
         </div>
       </section>
 
-
-      <section id="projects" aria-label="Featured projects">
+      <!-- Projects -->
+      <section id="projects" aria-label="Featured projects" class="bg-slate-50/60 dark:bg-slate-900/40 py-20 md:py-28">
         <div class="container">
-          <div class="projects-content">
-            <h2>Featured Projects</h2>
-            <div class="section-description">
-              Here are some of my recent projects that showcase my skills and experience.
-            </div>
-            <div class="projects-filter" role="tablist" aria-label="Project category filters">
-              <button class="filter-btn active" data-filter="all" role="tab" aria-selected="true" aria-controls="projects-grid" id="filter-all">
-                <span class="filter-icon">🚀</span>
-                <span>All</span>
-              </button>
-              <button class="filter-btn" data-filter="react" role="tab" aria-selected="false" aria-controls="projects-grid" id="filter-react">
-                <span class="filter-icon">⚛️</span>
-                <span>React</span>
-              </button>
-              <button class="filter-btn" data-filter="vue" role="tab" aria-selected="false" aria-controls="projects-grid" id="filter-vue">
-                <span class="filter-icon">💚</span>
-                <span>Vue.js</span>
-              </button>
-              <button class="filter-btn" data-filter="angular" role="tab" aria-selected="false" aria-controls="projects-grid" id="filter-angular">
-                <span class="filter-icon">🅰️</span>
-                <span>Angular</span>
-              </button>
-            </div>
-            <div class="projects-grid" id="projects-grid">
-              <div class="project-card" data-category="react">
-                <div class="project-image">
-                  <img loading="lazy" data-src="https://raw.githubusercontent.com/elvan/social-events-app-react-redux-firebase/main/_screenshots_/Screenshot%202024-02-19%20230738.png" alt="Social Events App" />
-                  <div class="project-overlay">
-                    <div class="project-links">
-                      <a href="https://github.com/elvan/social-events-app-react-redux-firebase" target="_blank" rel="noopener noreferrer" class="project-link">
-                        <i class="fab fa-github"></i> View Code
-                      </a>
-                    </div>
-                  </div>
-                </div>
-                <div class="project-info">
-                  <h3>Social Events App</h3>
-                  <p>A full-featured social events application built with React, Redux, and Firebase. Users can create, join, and manage events.</p>
-                  <div class="project-tech">
-                    <span class="tech-tag">React</span>
-                    <span class="tech-tag">Redux</span>
-                    <span class="tech-tag">Firebase</span>
-                    <span class="tech-tag">JavaScript</span>
-                  </div>
+          <h2 class="font-display text-3xl md:text-4xl font-bold mb-3" data-reveal>Featured Projects</h2>
+          <p class="text-slate-600 dark:text-slate-300 mb-8 max-w-3xl" data-reveal>Selected work that highlights my craft and problem‑solving.</p>
+
+          <div class="flex flex-wrap items-center gap-2 mb-8" role="tablist" aria-label="Project category filters">
+            <button class="filter-btn active px-4 py-2 rounded-full text-sm font-medium bg-indigo-600 text-white hover:bg-indigo-500 focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-600" data-filter="all" role="tab" aria-selected="true" aria-controls="projectsGrid" id="filter-all">
+              <span class="mr-1">🚀</span> All
+            </button>
+            <button class="filter-btn px-4 py-2 rounded-full text-sm font-medium border border-slate-300 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-900 focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-600" data-filter="react" role="tab" aria-selected="false" aria-controls="projectsGrid" id="filter-react">
+              <span class="mr-1">⚛️</span> React
+            </button>
+            <button class="filter-btn px-4 py-2 rounded-full text-sm font-medium border border-slate-300 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-900 focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-600" data-filter="vue" role="tab" aria-selected="false" aria-controls="projectsGrid" id="filter-vue">
+              <span class="mr-1">💚</span> Vue.js
+            </button>
+            <button class="filter-btn px-4 py-2 rounded-full text-sm font-medium border border-slate-300 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-900 focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-600" data-filter="angular" role="tab" aria-selected="false" aria-controls="projectsGrid" id="filter-angular">
+              <span class="mr-1">🅰️</span> Angular
+            </button>
+          </div>
+
+          <div id="projectsGrid" class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            <!-- Cards: same content as before, optimized with lazy loading and overlays -->
+            <article class="project-card group rounded-2xl overflow-hidden border border-slate-200 dark:border-slate-800 bg-white/60 dark:bg-slate-900/60" data-category="react" data-reveal>
+              <div class="relative aspect-[16/10] overflow-hidden">
+                <img class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" loading="lazy" data-src="https://raw.githubusercontent.com/elvan/social-events-app-react-redux-firebase/main/_screenshots_/Screenshot%202024-02-19%20230738.png" alt="Social Events App screenshot">
+                <div class="absolute inset-0 bg-gradient-to-t from-slate-900/70 via-slate-900/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                <div class="absolute inset-x-0 bottom-3 px-4 opacity-0 group-hover:opacity-100 transition-opacity">
+                  <a href="https://github.com/elvan/social-events-app-react-redux-firebase" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 text-white text-sm font-semibold">
+                    <i class="fab fa-github"></i> View Code
+                  </a>
                 </div>
               </div>
-              <div class="project-card" data-category="angular">
-                <div class="project-image">
-                  <img loading="lazy" data-src="https://raw.githubusercontent.com/elvan/contact-list-app-angular-firebase/main/_screenshots/Screenshot%202023-04-15%20043228.png" alt="Contact List App" />
-                  <div class="project-overlay">
-                    <div class="project-links">
-                      <a href="https://github.com/elvan/contact-list-app-angular-firebase" target="_blank" rel="noopener noreferrer" class="project-link">
-                        <i class="fab fa-github"></i> View Code
-                      </a>
-                    </div>
-                  </div>
-                </div>
-                <div class="project-info">
-                  <h3>Contact List App</h3>
-                  <p>A contact management application developed with Angular and Firebase, featuring real-time updates and search functionality.</p>
-                  <div class="project-tech">
-                    <span class="tech-tag">Angular</span>
-                    <span class="tech-tag">Firebase</span>
-                    <span class="tech-tag">TypeScript</span>
-                    <span class="tech-tag">SCSS</span>
-                  </div>
+              <div class="p-5">
+                <h3 class="font-semibold text-lg">Social Events App</h3>
+                <p class="mt-2 text-sm text-slate-600 dark:text-slate-300">A social events app built with React, Redux, and Firebase.</p>
+                <div class="mt-3 flex flex-wrap gap-2">
+                  <span class="px-2 py-1 text-xs rounded-full bg-slate-100 dark:bg-slate-800">React</span>
+                  <span class="px-2 py-1 text-xs rounded-full bg-slate-100 dark:bg-slate-800">Redux</span>
+                  <span class="px-2 py-1 text-xs rounded-full bg-slate-100 dark:bg-slate-800">Firebase</span>
                 </div>
               </div>
-              <div class="project-card" data-category="vue">
-                <div class="project-image">
-                  <img loading="lazy" data-src="https://raw.githubusercontent.com/elvan/note-taking-app-vue-firebase/main/_screenshots/Screenshot%202023-03-18%20151755.png" alt="Note Taking App" />
-                  <div class="project-overlay">
-                    <div class="project-links">
-                      <a href="https://github.com/elvan/note-taking-app-vue-firebase" target="_blank" rel="noopener noreferrer" class="project-link">
-                        <i class="fab fa-github"></i> View Code
-                      </a>
-                    </div>
-                  </div>
-                </div>
-                <div class="project-info">
-                  <h3>Note Taking App</h3>
-                  <p>A Vue.js and Firebase-powered note-taking application with real-time synchronization and markdown support.</p>
-                  <div class="project-tech">
-                    <span class="tech-tag">Vue.js</span>
-                    <span class="tech-tag">Firebase</span>
-                    <span class="tech-tag">JavaScript</span>
-                    <span class="tech-tag">CSS3</span>
-                  </div>
+            </article>
+
+            <article class="project-card group rounded-2xl overflow-hidden border border-slate-200 dark:border-slate-800 bg-white/60 dark:bg-slate-900/60" data-category="angular" data-reveal>
+              <div class="relative aspect-[16/10] overflow-hidden">
+                <img class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" loading="lazy" data-src="https://raw.githubusercontent.com/elvan/contact-list-app-angular-firebase/main/_screenshots/Screenshot%202023-04-15%20043228.png" alt="Contact List App screenshot">
+                <div class="absolute inset-0 bg-gradient-to-t from-slate-900/70 via-slate-900/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                <div class="absolute inset-x-0 bottom-3 px-4 opacity-0 group-hover:opacity-100 transition-opacity">
+                  <a href="https://github.com/elvan/contact-list-app-angular-firebase" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 text-white text-sm font-semibold">
+                    <i class="fab fa-github"></i> View Code
+                  </a>
                 </div>
               </div>
-              <div class="project-card" data-category="vue">
-                <div class="project-image">
-                  <img loading="lazy" data-src="https://raw.githubusercontent.com/elvan/music-playlist-app-vue-firebase/main/_screenshots_/Screenshot%202024-02-15%20072837.png" alt="Music Playlist App" />
-                  <div class="project-overlay">
-                    <div class="project-links">
-                      <a href="https://github.com/elvan/music-playlist-app-vue-firebase" target="_blank" rel="noopener noreferrer" class="project-link">
-                        <i class="fab fa-github"></i> View Code
-                      </a>
-                    </div>
-                  </div>
-                </div>
-                <div class="project-info">
-                  <h3>Music Playlist App</h3>
-                  <p>A music playlist manager built with Vue.js and Firebase, allowing users to create and share playlists.</p>
-                  <div class="project-tech">
-                    <span class="tech-tag">Vue.js</span>
-                    <span class="tech-tag">Firebase</span>
-                    <span class="tech-tag">JavaScript</span>
-                    <span class="tech-tag">CSS3</span>
-                  </div>
+              <div class="p-5">
+                <h3 class="font-semibold text-lg">Contact List App</h3>
+                <p class="mt-2 text-sm text-slate-600 dark:text-slate-300">Angular + Firebase with real-time updates and search.</p>
+                <div class="mt-3 flex flex-wrap gap-2">
+                  <span class="px-2 py-1 text-xs rounded-full bg-slate-100 dark:bg-slate-800">Angular</span>
+                  <span class="px-2 py-1 text-xs rounded-full bg-slate-100 dark:bg-slate-800">Firebase</span>
+                  <span class="px-2 py-1 text-xs rounded-full bg-slate-100 dark:bg-slate-800">TypeScript</span>
                 </div>
               </div>
-              <div class="project-card" data-category="vue">
-                <div class="project-image">
-                  <img loading="lazy" data-src="https://raw.githubusercontent.com/elvan/chat-room-app-vue-firebase/main/_screenshots_/Screenshot%202024-02-14%20120723.png" alt="Chat Room App" />
-                  <div class="project-overlay">
-                    <div class="project-links">
-                      <a href="https://github.com/elvan/chat-room-app-vue-firebase" target="_blank" rel="noopener noreferrer" class="project-link">
-                        <i class="fab fa-github"></i> View Code
-                      </a>
-                    </div>
-                  </div>
-                </div>
-                <div class="project-info">
-                  <h3>Chat Room App</h3>
-                  <p>A real-time chat application developed with Vue.js and Firebase, featuring multiple chat rooms and user authentication.</p>
-                  <div class="project-tech">
-                    <span class="tech-tag">Vue.js</span>
-                    <span class="tech-tag">Firebase</span>
-                    <span class="tech-tag">JavaScript</span>
-                    <span class="tech-tag">CSS3</span>
-                  </div>
+            </article>
+
+            <article class="project-card group rounded-2xl overflow-hidden border border-slate-200 dark:border-slate-800 bg-white/60 dark:bg-slate-900/60" data-category="vue" data-reveal>
+              <div class="relative aspect-[16/10] overflow-hidden">
+                <img class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" loading="lazy" data-src="https://raw.githubusercontent.com/elvan/note-taking-app-vue-firebase/main/_screenshots/Screenshot%202023-03-18%20151755.png" alt="Note Taking App screenshot">
+                <div class="absolute inset-0 bg-gradient-to-t from-slate-900/70 via-slate-900/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                <div class="absolute inset-x-0 bottom-3 px-4 opacity-0 group-hover:opacity-100 transition-opacity">
+                  <a href="https://github.com/elvan/note-taking-app-vue-firebase" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 text-white text-sm font-semibold">
+                    <i class="fab fa-github"></i> View Code
+                  </a>
                 </div>
               </div>
-              <div class="project-card" data-category="react">
-                <div class="project-image">
-                  <img loading="lazy" data-src="https://raw.githubusercontent.com/elvan/finance-tracker-app-react-firebase/main/_screenshots/Screenshot%202023-04-24%20203926.png" alt="Finance Tracker App"  />
-                  <div class="project-overlay">
-                    <div class="project-links">
-                      <a href="https://github.com/elvan/finance-tracker-app-react-firebase" target="_blank" rel="noopener noreferrer" class="project-link">
-                        <i class="fab fa-github"></i> View Code
-                      </a>
-                    </div>
-                  </div>
-                </div>
-                <div class="project-info">
-                  <h3>Finance Tracker App</h3>
-                  <p>A personal finance tracking application built with React and Firebase, helping users manage their expenses and income.</p>
-                  <div class="project-tech">
-                    <span class="tech-tag">React</span>
-                    <span class="tech-tag">Firebase</span>
-                    <span class="tech-tag">JavaScript</span>
-                    <span class="tech-tag">CSS3</span>
-                  </div>
+              <div class="p-5">
+                <h3 class="font-semibold text-lg">Note Taking App</h3>
+                <p class="mt-2 text-sm text-slate-600 dark:text-slate-300">Vue.js + Firebase with real-time sync and markdown.</p>
+                <div class="mt-3 flex flex-wrap gap-2">
+                  <span class="px-2 py-1 text-xs rounded-full bg-slate-100 dark:bg-slate-800">Vue.js</span>
+                  <span class="px-2 py-1 text-xs rounded-full bg-slate-100 dark:bg-slate-800">Firebase</span>
+                  <span class="px-2 py-1 text-xs rounded-full bg-slate-100 dark:bg-slate-800">JavaScript</span>
                 </div>
               </div>
-            </div>
+            </article>
+
+            <article class="project-card group rounded-2xl overflow-hidden border border-slate-200 dark:border-slate-800 bg-white/60 dark:bg-slate-900/60" data-category="vue" data-reveal>
+              <div class="relative aspect-[16/10] overflow-hidden">
+                <img class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" loading="lazy" data-src="https://raw.githubusercontent.com/elvan/music-playlist-app-vue-firebase/main/_screenshots_/Screenshot%202024-02-15%20072837.png" alt="Music Playlist App screenshot">
+                <div class="absolute inset-0 bg-gradient-to-t from-slate-900/70 via-slate-900/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                <div class="absolute inset-x-0 bottom-3 px-4 opacity-0 group-hover:opacity-100 transition-opacity">
+                  <a href="https://github.com/elvan/music-playlist-app-vue-firebase" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 text-white text-sm font-semibold">
+                    <i class="fab fa-github"></i> View Code
+                  </a>
+                </div>
+              </div>
+              <div class="p-5">
+                <h3 class="font-semibold text-lg">Music Playlist App</h3>
+                <p class="mt-2 text-sm text-slate-600 dark:text-slate-300">Create and share playlists with Vue.js + Firebase.</p>
+                <div class="mt-3 flex flex-wrap gap-2">
+                  <span class="px-2 py-1 text-xs rounded-full bg-slate-100 dark:bg-slate-800">Vue.js</span>
+                  <span class="px-2 py-1 text-xs rounded-full bg-slate-100 dark:bg-slate-800">Firebase</span>
+                  <span class="px-2 py-1 text-xs rounded-full bg-slate-100 dark:bg-slate-800">JavaScript</span>
+                </div>
+              </div>
+            </article>
+
+            <article class="project-card group rounded-2xl overflow-hidden border border-slate-200 dark:border-slate-800 bg-white/60 dark:bg-slate-900/60" data-category="vue" data-reveal>
+              <div class="relative aspect-[16/10] overflow-hidden">
+                <img class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" loading="lazy" data-src="https://raw.githubusercontent.com/elvan/chat-room-app-vue-firebase/main/_screenshots_/Screenshot%202024-02-14%20120723.png" alt="Chat Room App screenshot">
+                <div class="absolute inset-0 bg-gradient-to-t from-slate-900/70 via-slate-900/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                <div class="absolute inset-x-0 bottom-3 px-4 opacity-0 group-hover:opacity-100 transition-opacity">
+                  <a href="https://github.com/elvan/chat-room-app-vue-firebase" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 text-white text-sm font-semibold">
+                    <i class="fab fa-github"></i> View Code
+                  </a>
+                </div>
+              </div>
+              <div class="p-5">
+                <h3 class="font-semibold text-lg">Chat Room App</h3>
+                <p class="mt-2 text-sm text-slate-600 dark:text-slate-300">Real‑time chat with multiple rooms and auth.</p>
+                <div class="mt-3 flex flex-wrap gap-2">
+                  <span class="px-2 py-1 text-xs rounded-full bg-slate-100 dark:bg-slate-800">Vue.js</span>
+                  <span class="px-2 py-1 text-xs rounded-full bg-slate-100 dark:bg-slate-800">Firebase</span>
+                  <span class="px-2 py-1 text-xs rounded-full bg-slate-100 dark:bg-slate-800">JavaScript</span>
+                </div>
+              </div>
+            </article>
+
+            <article class="project-card group rounded-2xl overflow-hidden border border-slate-200 dark:border-slate-800 bg-white/60 dark:bg-slate-900/60" data-category="react" data-reveal>
+              <div class="relative aspect-[16/10] overflow-hidden">
+                <img class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" loading="lazy" data-src="https://raw.githubusercontent.com/elvan/finance-tracker-app-react-firebase/main/_screenshots/Screenshot%202023-04-24%20203926.png" alt="Finance Tracker App screenshot">
+                <div class="absolute inset-0 bg-gradient-to-t from-slate-900/70 via-slate-900/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                <div class="absolute inset-x-0 bottom-3 px-4 opacity-0 group-hover:opacity-100 transition-opacity">
+                  <a href="https://github.com/elvan/finance-tracker-app-react-firebase" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 text-white text-sm font-semibold">
+                    <i class="fab fa-github"></i> View Code
+                  </a>
+                </div>
+              </div>
+              <div class="p-5">
+                <h3 class="font-semibold text-lg">Finance Tracker App</h3>
+                <p class="mt-2 text-sm text-slate-600 dark:text-slate-300">Track expenses and income with React + Firebase.</p>
+                <div class="mt-3 flex flex-wrap gap-2">
+                  <span class="px-2 py-1 text-xs rounded-full bg-slate-100 dark:bg-slate-800">React</span>
+                  <span class="px-2 py-1 text-xs rounded-full bg-slate-100 dark:bg-slate-800">Firebase</span>
+                </div>
+              </div>
+            </article>
           </div>
         </div>
       </section>
 
-      <section id="contact" aria-label="Contact information">
-        <div class="container">
-          <div class="contact-content">
-            <h2>Get In Touch</h2>
-            <p class="section-description">I'm always open to new opportunities and collaborations. Feel free to reach out!</p>
-            <div class="contact-links">
-              <a href="https://github.com/elvan" target="_blank" rel="noopener noreferrer" class="contact-link">
-                <i class="fab fa-github"></i>
-                <span>github.com/elvan</span>
-              </a>
-              <a href="https://linkedin.com/in/elvan-hidayat" target="_blank" rel="noopener noreferrer" class="contact-link">
-                <i class="fab fa-linkedin"></i>
-                <span>linkedin.com/in/elvan-hidayat</span>
-              </a>
-              <a href="https://t.me/elvanhd" target="_blank" rel="noopener noreferrer" class="contact-link">
-                <i class="fab fa-telegram"></i>
-                <span>@elvanhd</span>
-              </a>
-            </div>
+      <!-- Contact -->
+      <section id="contact" aria-label="Contact information" class="container py-20 md:py-28">
+        <div class="rounded-2xl border border-slate-200 dark:border-slate-800 p-8 bg-white/50 dark:bg-slate-900/50" data-reveal>
+          <h2 class="font-display text-3xl md:text-4xl font-bold mb-3">Get In Touch</h2>
+          <p class="text-slate-600 dark:text-slate-300 mb-6">I'm always open to new opportunities and collaborations. Reach out on your platform of choice.</p>
+          <div class="flex flex-wrap gap-3">
+            <a href="https://github.com/elvan" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 rounded-lg border border-slate-300 dark:border-slate-700 px-4 py-2 text-sm font-medium hover:bg-slate-50 dark:hover:bg-slate-900"><i class="fab fa-github"></i> github.com/elvan</a>
+            <a href="https://linkedin.com/in/elvan-hidayat" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 rounded-lg border border-slate-300 dark:border-slate-700 px-4 py-2 text-sm font-medium hover:bg-slate-50 dark:hover:bg-slate-900"><i class="fab fa-linkedin"></i> linkedin.com/in/elvan-hidayat</a>
+            <a href="https://t.me/elvanhd" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 rounded-lg border border-slate-300 dark:border-slate-700 px-4 py-2 text-sm font-medium hover:bg-slate-50 dark:hover:bg-slate-900"><i class="fab fa-telegram"></i> @elvanhd</a>
           </div>
         </div>
       </section>
     </main>
 
-    <footer role="contentinfo">
-      <div class="container">
-        <div class="footer-content">
-          <p>&copy; <span id="currentYear">2025</span> Elvan Hidayat. All rights reserved.</p>
-        </div>
+    <!-- Footer -->
+    <footer role="contentinfo" class="border-t border-slate-200 dark:border-slate-800">
+      <div class="container py-6 text-sm text-slate-500 flex items-center justify-between">
+        <p>&copy; <span id="currentYear"></span> Elvan Hidayat. All rights reserved.</p>
+        <a href="#home" class="hover:text-slate-700 dark:hover:text-slate-300">Back to top</a>
       </div>
     </footer>
 
-    <button class="scroll-top" aria-label="Scroll to top">
+    <!-- Scroll to top -->
+    <button id="scrollTopBtn" class="fixed bottom-6 right-6 z-40 hidden rounded-full p-3 bg-indigo-600 text-white shadow-soft hover:bg-indigo-500 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-indigo-600" aria-label="Scroll to top">
       <i class="fas fa-arrow-up"></i>
     </button>
 
-    <script src="script.js"></script>
+    <script src="script.js" defer></script>
   </body>
 </html>

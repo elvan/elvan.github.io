@@ -2,7 +2,279 @@
  * Modern Portfolio - Interactive Functionality
  * Optimized for performance with efficient event handling and smooth animations
  */
+// Accessibility & UX helpers
+const qs = (sel, ctx = document) => ctx.querySelector(sel);
+const qsa = (sel, ctx = document) => Array.from(ctx.querySelectorAll(sel));
+const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
+// Loader
+const pageLoader = qs('#pageLoader');
+const hideLoader = () => {
+  if (!pageLoader) return;
+  pageLoader.style.opacity = '0';
+  pageLoader.style.pointerEvents = 'none';
+  setTimeout(() => pageLoader.remove(), 300);
+};
+window.addEventListener('load', () => prefersReducedMotion ? pageLoader.remove() : hideLoader());
+document.addEventListener('DOMContentLoaded', () => {
+  // Fallback hide in case load waits on slow images (we lazy load anyway)
+  setTimeout(() => { if (pageLoader && document.readyState !== 'loading') hideLoader(); }, 1200);
+});
+
+// Theme toggle
+function setTheme(useDark) {
+  const html = document.documentElement;
+  html.classList.toggle('dark', useDark);
+  try {
+    localStorage.setItem('theme', useDark ? 'dark' : 'light');
+  } catch {}
+  const icon = qs('#themeIcon'); const iconM = qs('#themeIconMobile');
+  [icon, iconM].forEach(i => {
+    if (!i) return;
+    i.classList.toggle('fa-moon', !useDark);
+    i.classList.toggle('fa-sun', useDark);
+  });
+  const themeMeta = qs('meta[name="theme-color"]');
+  if (themeMeta) themeMeta.content = useDark ? '#0f172a' : '#ffffff';
+}
+function initThemeControls() {
+  const stored = (() => { try { return localStorage.getItem('theme'); } catch { return null; } })();
+  const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+  setTheme(stored ? stored === 'dark' : prefersDark);
+
+  const btn = qs('#themeToggle');
+  const btnM = qs('#themeToggleMobile');
+  const handle = () => setTheme(!document.documentElement.classList.contains('dark'));
+  btn?.addEventListener('click', handle);
+  btnM?.addEventListener('click', handle);
+}
+
+// Mobile menu
+function initMobileMenu() {
+  const btn = qs('#mobileMenuButton');
+  const menu = qs('#mobileMenu');
+  if (!btn || !menu) return;
+  btn.addEventListener('click', () => {
+    const isOpen = !menu.classList.contains('hidden');
+    menu.classList.toggle('hidden', isOpen);
+    btn.setAttribute('aria-expanded', String(!isOpen));
+  });
+  // close on link click
+  qsa('a[href^="#"]', menu).forEach(a => {
+    a.addEventListener('click', () => {
+      menu.classList.add('hidden');
+      btn.setAttribute('aria-expanded', 'false');
+    });
+  });
+}
+
+// Smooth anchor scroll with header offset
+function initSmoothAnchors() {
+  const header = document.querySelector('header');
+  const headerOffset = () => (header ? header.getBoundingClientRect().height : 0);
+  qsa('a[href^="#"]').forEach(a => {
+    a.addEventListener('click', (e) => {
+      const id = a.getAttribute('href');
+      if (!id || id.length < 2) return;
+      const target = qs(id);
+      if (!target) return;
+      e.preventDefault();
+      const y = target.getBoundingClientRect().top + window.scrollY - (headerOffset() + 8);
+      window.scrollTo({ top: y, behavior: 'smooth' });
+    });
+  });
+}
+
+// Scroll progress bar
+function initScrollProgress() {
+  const bar = qs('#scrollProgress');
+  if (!bar) return;
+  const update = () => {
+    const h = document.documentElement;
+    const max = h.scrollHeight - window.innerHeight;
+    const pct = Math.max(0, Math.min(1, window.scrollY / (max || 1)));
+    bar.style.width = (pct * 100) + '%';
+  };
+  update();
+  window.addEventListener('scroll', update, { passive: true });
+  window.addEventListener('resize', update);
+}
+
+// Scroll to top
+function initScrollTop() {
+  const btn = qs('#scrollTopBtn');
+  if (!btn) return;
+  const toggle = () => {
+    if (window.scrollY > 400) btn.classList.remove('hidden');
+    else btn.classList.add('hidden');
+  };
+  toggle();
+  window.addEventListener('scroll', toggle, { passive: true });
+  btn.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+}
+
+// Typing effect
+function initTyping() {
+  const el = qs('#typedText');
+  if (!el) return;
+  const phrases = [
+    'Full‑Stack Developer',
+    'Accessibility Advocate',
+    'Performance Tuner',
+    'Problem Solver',
+    'UI Polisher'
+  ];
+  let pi = 0, ci = 0, deleting = false;
+  const speed = () => (deleting ? 40 : 80);
+  const pause = 1200;
+
+  function tick() {
+    const phrase = phrases[pi];
+    if (!deleting) {
+      el.textContent = phrase.slice(0, ci + 1);
+      ci++;
+      if (ci === phrase.length) {
+        deleting = true;
+        return setTimeout(tick, pause);
+      }
+    } else {
+      el.textContent = phrase.slice(0, ci - 1);
+      ci--;
+      if (ci === 0) {
+        deleting = false;
+        pi = (pi + 1) % phrases.length;
+      }
+    }
+    setTimeout(tick, prefersReducedMotion ? 0 : speed());
+  }
+  tick();
+}
+
+// Reveal on scroll
+function initRevealOnScroll() {
+  const items = qsa('[data-reveal]');
+  if (items.length === 0) return;
+  items.forEach(el => {
+    el.style.transition = prefersReducedMotion ? 'none' : 'all 500ms cubic-bezier(.21,1,.21,1)';
+    el.style.transform = 'translateY(12px)';
+    el.style.opacity = '0';
+  });
+  if (prefersReducedMotion) {
+    items.forEach(el => { el.style.transform = 'none'; el.style.opacity = '1'; });
+    return;
+  }
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.style.transform = 'none';
+        e.target.style.opacity = '1';
+        io.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.15 });
+  items.forEach(el => io.observe(el));
+}
+
+// Skills progress bars
+function initSkills() {
+  const bars = qsa('.skill-bar');
+  if (bars.length === 0) return;
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        const w = e.target.getAttribute('data-width') || '0';
+        e.target.style.transition = prefersReducedMotion ? 'none' : 'width 1s ease';
+        requestAnimationFrame(() => e.target.style.width = `${w}%`);
+        io.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.3 });
+  bars.forEach(b => io.observe(b));
+}
+
+// Projects filter
+function initProjectFilters() {
+  const buttons = qsa('.filter-btn');
+  const cards = qsa('.project-card');
+  if (!buttons.length || !cards.length) return;
+
+  function setActive(btn) {
+    buttons.forEach(b => {
+      b.classList.remove('active');
+      b.setAttribute('aria-selected', 'false');
+      b.classList.remove('bg-indigo-600', 'text-white');
+      b.classList.add('border', 'border-slate-300', 'dark:border-slate-700');
+    });
+    btn.classList.add('active', 'bg-indigo-600', 'text-white');
+    btn.classList.remove('border', 'border-slate-300', 'dark:border-slate-700');
+    btn.setAttribute('aria-selected', 'true');
+  }
+
+  buttons.forEach(btn => {
+    btn.addEventListener('click', () => {
+      const filter = btn.getAttribute('data-filter');
+      setActive(btn);
+      cards.forEach(card => {
+        const category = card.getAttribute('data-category');
+        const match = filter === 'all' || filter === category;
+        if (match) {
+          card.classList.remove('hidden');
+          card.style.opacity = '1';
+          card.style.transform = 'none';
+        } else {
+          card.classList.add('hidden');
+        }
+      });
+    });
+  });
+}
+
+// Lazy load images
+function initLazyImages() {
+  const imgs = qsa('img[data-src]');
+  if (!imgs.length) return;
+  const load = img => {
+    const src = img.getAttribute('data-src');
+    if (!src) return;
+    img.src = src;
+    img.removeAttribute('data-src');
+  };
+  if ('loading' in HTMLImageElement.prototype) {
+    imgs.forEach(load);
+    return;
+  }
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        load(e.target);
+        io.unobserve(e.target);
+      }
+    });
+  }, { rootMargin: '200px' });
+  imgs.forEach(img => io.observe(img));
+}
+
+// Current year
+function setCurrentYear() {
+  const y = new Date().getFullYear();
+  const el = qs('#currentYear');
+  if (el) el.textContent = String(y);
+}
+
+// Init all
+document.addEventListener('DOMContentLoaded', () => {
+  initThemeControls();
+  initMobileMenu();
+  initSmoothAnchors();
+  initScrollProgress();
+  initScrollTop();
+  initTyping();
+  initRevealOnScroll();
+  initSkills();
+  initProjectFilters();
+  initLazyImages();
+  setCurrentYear();
+});
 class PortfolioApp {
   constructor() {
     this.nav = document.querySelector('nav');
@@ -75,21 +347,21 @@ class PortfolioApp {
   setupMagneticHover() {
     // Add magnetic hover effect to buttons and cards
     const magneticElements = document.querySelectorAll('.cta-button, .hero-social a, .project-card, .contact-link');
-    
+
     magneticElements.forEach(element => {
       element.addEventListener('mousemove', (e) => {
         if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-        
+
         const rect = element.getBoundingClientRect();
         const x = e.clientX - rect.left - rect.width / 2;
         const y = e.clientY - rect.top - rect.height / 2;
-        
+
         const moveX = x * 0.1;
         const moveY = y * 0.1;
-        
+
         element.style.transform = `translate(${moveX}px, ${moveY}px) scale(1.02)`;
       });
-      
+
       element.addEventListener('mouseleave', () => {
         element.style.transform = '';
       });
@@ -99,14 +371,14 @@ class PortfolioApp {
   setupParallaxElements() {
     // Add subtle parallax effect to background elements
     const parallaxElements = document.querySelectorAll('[data-parallax]');
-    
+
     if (parallaxElements.length === 0) return;
-    
+
     window.addEventListener('scroll', () => {
       if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-      
+
       const scrolled = window.pageYOffset;
-      
+
       parallaxElements.forEach(element => {
         const rate = scrolled * -0.5;
         element.style.transform = `translateY(${rate}px)`;
@@ -117,7 +389,7 @@ class PortfolioApp {
   setupRevealAnimations() {
     // Enhanced reveal animations for elements
     const revealElements = document.querySelectorAll('.stat-item, .filter-btn, .tech-tag');
-    
+
     const revealObserver = new IntersectionObserver((entries) => {
       entries.forEach((entry, index) => {
         if (entry.isIntersecting) {
@@ -172,11 +444,11 @@ class PortfolioApp {
     // Monitor network connection for adaptive loading
     if ('connection' in navigator) {
       const connection = navigator.connection;
-      
+
       const updateConnectionInfo = () => {
         const isSlowConnection = connection.effectiveType === '2g' || connection.effectiveType === 'slow-2g';
         document.documentElement.setAttribute('data-connection', connection.effectiveType);
-        
+
         if (isSlowConnection) {
           // Disable some animations for slow connections
           document.documentElement.setAttribute('data-reduced-motion', 'true');
@@ -209,7 +481,7 @@ class PortfolioApp {
   setupPreferredMotionHandling() {
     // Respect user's motion preferences
     const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
-    
+
     const handleMotionPreference = (e) => {
       if (e.matches) {
         document.documentElement.setAttribute('data-reduced-motion', 'true');
@@ -235,7 +507,7 @@ class PortfolioApp {
     if (this.typingTimeout) {
       clearTimeout(this.typingTimeout);
     }
-    
+
     // Pause other animations
     document.documentElement.style.animationPlayState = 'paused';
   }
@@ -245,7 +517,7 @@ class PortfolioApp {
     if (this.typedTextSpan) {
       this.startTypingAnimation();
     }
-    
+
     // Resume other animations
     document.documentElement.style.animationPlayState = 'running';
   }
@@ -253,7 +525,7 @@ class PortfolioApp {
   performCleanup() {
     // Clean up unnecessary DOM references
     this.cleanupDeadReferences();
-    
+
     // Force garbage collection if possible
     if (window.gc) {
       window.gc();
@@ -273,11 +545,11 @@ class PortfolioApp {
     if (this.scrollTimeout) {
       clearTimeout(this.scrollTimeout);
     }
-    
+
     if (this.typingTimeout) {
       clearTimeout(this.typingTimeout);
     }
-    
+
     // Clean up intersection observers
     this.observers?.forEach(observer => observer.disconnect());
   }
@@ -469,7 +741,7 @@ class PortfolioApp {
       'Escape - Close menus',
       '? - Show this help'
     ];
-    
+
     this.announceToScreenReader(`Keyboard shortcuts available: ${shortcuts.join(', ')}`);
   }
 
@@ -580,13 +852,13 @@ class PortfolioApp {
 
     // Add loading state with blur effect
     img.classList.add('loading');
-    
+
     // Create optimized image loader
     const loader = new Image();
-    
+
     // Don't set crossOrigin for GitHub images initially to avoid ORB issues
     // We'll try with crossOrigin only if the basic load fails
-    
+
     // Set up loading timeout for slow connections
     const loadingTimeout = setTimeout(() => {
       console.warn(`Image loading timeout: ${src}`);
@@ -595,7 +867,7 @@ class PortfolioApp {
 
     loader.onload = () => {
       clearTimeout(loadingTimeout);
-      
+
       // Use requestAnimationFrame for smooth transition
       requestAnimationFrame(() => {
         img.src = src;
@@ -603,7 +875,7 @@ class PortfolioApp {
         img.classList.remove('loading');
         img.classList.add('loaded');
         img.removeAttribute('data-src');
-        
+
         // Remove placeholder
         this.removeImagePlaceholder(img);
       });
@@ -622,13 +894,13 @@ class PortfolioApp {
 
   handleImageLoadError(img, originalSrc, fallback) {
     console.warn(`Image failed to load: ${originalSrc}`);
-    
+
     // For GitHub URLs, try with CORS as a fallback
     if (originalSrc.includes('raw.githubusercontent.com')) {
       this.tryWithCORS(img, originalSrc, fallback);
       return;
     }
-    
+
     // Use fallback or show error state
     if (fallback) {
       this.loadFallbackImage(img, fallback);
@@ -640,10 +912,10 @@ class PortfolioApp {
   tryWithCORS(img, src, fallback) {
     console.log(`Trying with CORS as fallback: ${src}`);
     const corsLoader = new Image();
-    
+
     // Try with crossOrigin as fallback
     corsLoader.crossOrigin = 'anonymous';
-    
+
     corsLoader.onload = () => {
       img.src = src;
       img.crossOrigin = 'anonymous';
@@ -651,7 +923,7 @@ class PortfolioApp {
       img.classList.add('loaded');
       this.removeImagePlaceholder(img);
     };
-    
+
     corsLoader.onerror = () => {
       console.warn(`Image failed even with CORS: ${src}`);
       if (fallback) {
@@ -660,7 +932,7 @@ class PortfolioApp {
         this.showImageError(img);
       }
     };
-    
+
     corsLoader.src = src;
   }
 
@@ -668,7 +940,7 @@ class PortfolioApp {
     img.classList.remove('loading');
     img.classList.add('error');
     this.removeImagePlaceholder(img);
-    
+
     // Add a fallback placeholder with project info
     const errorDiv = document.createElement('div');
     errorDiv.className = 'image-error';
@@ -685,7 +957,7 @@ class PortfolioApp {
       background: var(--gray-50);
       border-radius: inherit;
     `;
-    
+
     img.parentNode.appendChild(errorDiv);
   }
 
@@ -703,11 +975,11 @@ class PortfolioApp {
       animation: placeholderShimmer 1.5s infinite linear;
       border-radius: inherit;
     `;
-    
+
     if (img.parentNode && img.parentNode.style.position !== 'relative') {
       img.parentNode.style.position = 'relative';
     }
-    
+
     img.parentNode?.appendChild(placeholder);
     img.placeholderElement = placeholder;
   }
@@ -740,23 +1012,23 @@ class PortfolioApp {
     if (src.includes('raw.githubusercontent.com') || src.includes('github.com')) {
       return src;
     }
-    
+
     // Check for WebP and AVIF support for other CDNs
     const supportsWebP = this.checkWebPSupport();
     const supportsAVIF = this.checkAVIFSupport();
-    
+
     if (supportsAVIF && !src.includes('github')) {
       return src.replace(/\.(jpg|jpeg|png)$/i, '.avif');
     } else if (supportsWebP && !src.includes('github')) {
       return src.replace(/\.(jpg|jpeg|png)$/i, '.webp');
     }
-    
+
     return src;
   }
 
   checkWebPSupport() {
     if (this.webpSupport !== undefined) return this.webpSupport;
-    
+
     const canvas = document.createElement('canvas');
     canvas.width = canvas.height = 1;
     this.webpSupport = canvas.toDataURL('image/webp').indexOf('data:image/webp') === 0;
@@ -765,7 +1037,7 @@ class PortfolioApp {
 
   checkAVIFSupport() {
     if (this.avifSupport !== undefined) return this.avifSupport;
-    
+
     const canvas = document.createElement('canvas');
     canvas.width = canvas.height = 1;
     this.avifSupport = canvas.toDataURL('image/avif').indexOf('data:image/avif') === 0;
@@ -865,25 +1137,25 @@ class PortfolioApp {
       // Ensure keyboard navigation visibility
       document.body.classList.add('keyboard-navigation');
     }
-    
+
     // Enhanced keyboard navigation for project filters
     if (e.target.matches('.filter-btn')) {
       this.handleFilterKeyNavigation(e);
     }
-    
+
     // Enhanced keyboard navigation for experience items and projects
     if (e.target.matches('.experience-item, .project-card')) {
       this.handleCardKeyNavigation(e);
     }
   }
-  
+
   handleFilterKeyNavigation(e) {
     const currentFilter = e.target;
     const allFilters = [...document.querySelectorAll('.filter-btn')];
     const currentIndex = allFilters.indexOf(currentFilter);
-    
+
     let nextIndex;
-    
+
     switch(e.key) {
       case 'ArrowLeft':
         e.preventDefault();
@@ -910,7 +1182,7 @@ class PortfolioApp {
         break;
     }
   }
-  
+
   handleCardKeyNavigation(e) {
     if (e.key === 'Enter' || e.key === ' ') {
       e.preventDefault();
@@ -927,7 +1199,7 @@ class PortfolioApp {
     if (window.innerWidth > 768) {
       this.closeMobileMenu();
     }
-    
+
     // Update scroll progress on resize
     this.updateScrollProgress();
   }
@@ -946,13 +1218,13 @@ class PortfolioApp {
   setupHoverPrefetch() {
     // Prefetch critical interactions on hover for better performance
     const interactiveElements = document.querySelectorAll('a[href^="#"], .cta-button, .filter-btn');
-    
+
     interactiveElements.forEach(element => {
       element.addEventListener('mouseenter', () => {
         // Warm up the interaction - can add specific prefetch logic here
         element.classList.add('hover-prefetch');
       }, { once: false, passive: true });
-      
+
       element.addEventListener('mouseleave', () => {
         element.classList.remove('hover-prefetch');
       }, { passive: true });
@@ -970,7 +1242,7 @@ class PortfolioApp {
 
     // Update ARIA attributes for accessibility
     this.mobileMenuBtn?.setAttribute('aria-expanded', isActive.toString());
-    
+
     // Manage focus for better accessibility
     if (isActive) {
       // Focus first link when menu opens
@@ -1022,7 +1294,7 @@ class PortfolioApp {
 
       this.scrollProgress.style.transform = `scaleX(${progress / 100})`;
       this.scrollProgress.style.transformOrigin = 'left';
-      
+
       this.scrollCache.lastUpdate = now;
     }
   }
@@ -1071,12 +1343,12 @@ class PortfolioApp {
   announceThemeChange(theme) {
     this.announceToScreenReader(`Switched to ${theme} mode`);
   }
-  
+
   announceFilterChange(filter, count) {
     const filterText = filter === 'all' ? 'all projects' : `${filter} projects`;
     this.announceToScreenReader(`Showing ${count} ${filterText}`);
   }
-  
+
   announceToScreenReader(message) {
     // Use the dedicated live region created in setupLiveRegionUpdates
     let announcement = document.getElementById('aria-live-region');
@@ -1089,7 +1361,7 @@ class PortfolioApp {
       announcement.className = 'sr-only';
       document.body.appendChild(announcement);
     }
-    
+
     // Clear and set new message with proper timing
     announcement.textContent = '';
     requestAnimationFrame(() => {
@@ -1098,7 +1370,7 @@ class PortfolioApp {
       }, 100);
     });
   }
-  
+
   // Update copyright year to current year
   updateCopyrightYear() {
     const yearElement = document.getElementById('currentYear');
@@ -1122,7 +1394,7 @@ class PortfolioApp {
     });
     activeButton.classList.add('active');
     activeButton.setAttribute('aria-selected', 'true');
-    
+
     // Update tabpanel labelledby
     if (projectsGrid) {
       projectsGrid.setAttribute('aria-labelledby', activeButton.id);
@@ -1170,7 +1442,7 @@ class PortfolioApp {
 
       setTimeout(() => {
         this.pageLoader.classList.add('loaded');
-        
+
         // Remove from DOM after animation completes
         setTimeout(() => {
           if (this.pageLoader.parentNode) {
